@@ -829,8 +829,14 @@ async function authSignUp(){
   const btn=document.getElementById('authSubmitBtn');
   btn.textContent='Création…';btn.disabled=true;
   try{
-    const {error}=await sb.auth.signUp({email,password:pwd});
+    const {data,error}=await sb.auth.signUp({email,password:pwd});
     if(error)throw error;
+    // Création réussie, créer la ligne user_data
+    if(data?.user?.id){
+      try{
+        await sb.from('user_data').insert({user_id:data.user.id,data:{}});
+      }catch(e){console.warn('user_data insert failed, will retry later',e);}
+    }
     okEl.textContent='✓ Compte créé et connecté !';
     setTimeout(()=>closeModal('modalAuth'),1000);
   }catch(e){
