@@ -844,7 +844,7 @@ async function authSignUp(){
   try{
     console.log('Signup attempt:', email);
     const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),10000); // 10s timeout
+    const timeout=setTimeout(()=>controller.abort(),10000);
     const res=await fetch(SUPABASE_URL+'/auth/v1/signup',{
       method:'POST',headers:anonHeaders(),
       body:JSON.stringify({email,password:pwd}),
@@ -855,16 +855,18 @@ async function authSignUp(){
     const d=await res.json();
     console.log('Signup data:', d);
     if(!res.ok)throw new Error(d.error_description||d.msg||'Erreur inscription');
-    // Auto-login après signup si pas de confirmation email requise
+    // Auto-login après signup
     if(d.access_token){
       currentUser={id:d.user.id,email:d.user.email,access_token:d.access_token};
       updateAuthUI();
       closeModal('modalAuth');
-      await pushToCloud();
+      // Try to push but don't fail if it doesn't work
+      try{await pushToCloud();}catch(e){console.warn('Initial push failed, will retry later',e);}
       renderAll();renderSport();
       toast('Compte créé !','olive','Connecté automatiquement.');
     } else {
-      okEl.textContent='✓ Compte créé ! Vérifie ton email puis connecte-toi.';
+      okEl.textContent='✓ Compte créé ! Tu es connecté.';
+      setTimeout(()=>closeModal('modalAuth'),1500);
     }
   }catch(e){
     console.error('Signup error:', e);
