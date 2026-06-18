@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root{
@@ -789,48 +790,34 @@ let DATA={
 };
 
 /* ============================================================
-   SUPABASE — REST API DIRECTE (pas de CDN)
+   SUPABASE — SDK (fonctionne maintenant qu'on est sur HTTPS)
    ============================================================ */
 const SUPABASE_URL='https://csotvmnwpvezgakbhvbr.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNzb3R2bW53cHZlemdha2JodmJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MDkxMDEsImV4cCI6MjA5NzE4NTEwMX0._Eh1APdr2a-4YO3P0vy-KwcN1yj_YnoOf1ChJQMgUDY';
-let currentUser=null; // { id, email, access_token }
+let sb=null;
+let currentUser=null;
 let syncTimer=null;
 let authMode='login';
 
-/* Headers helpers */
-function anonHeaders(){
-  return{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY};
-}
-function userHeaders(){
-  return{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+currentUser.access_token};
-}
-
-/* ---- AUTH ---- */
-async function authLogin(){
-  const email=document.getElementById('authEmail').value.trim();
-  const pwd=document.getElementById('authPassword').value;
-  const errEl=document.getElementById('authError');
-  const okEl=document.getElementById('authOk');
-  errEl.textContent='';okEl.textContent='';
-  if(!email||!pwd){errEl.textContent='Email et mot de passe requis.';return;}
-  const btn=document.getElementById('authSubmitBtn');
-  btn.textContent='Connexion…';btn.disabled=true;
-  try{
-    const res=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{
-      method:'POST',headers:anonHeaders(),
-      body:JSON.stringify({email,password:pwd})
-    });
-    const d=await res.json();
-    if(!res.ok)throw new Error(d.error_description||d.msg||'Erreur connexion');
-    currentUser={id:d.user.id,email:d.user.email,access_token:d.access_token};
+/* Init Supabase */
+function initSupabase(){
+  if(!window.supabase)return;
+  const {createClient}=supabase;
+  sb=createClient(SUPABASE_URL,SUPABASE_KEY);
+  
+  /* Listen to auth changes */
+  sb.auth.onAuthStateChange(async(event,session)=>{
+    currentUser=session?.user||null;
     updateAuthUI();
-    closeModal('modalAuth');
-    await loadFromCloud();
-    renderAll();renderSport();renderNutrition();renderSleep();renderSuppl();renderSuivi();
-  }catch(e){errEl.textContent=e.message;}
-  btn.textContent='Se connecter';btn.disabled=false;
+    if(currentUser){
+      await loadFromCloud();
+      renderAll();renderSport();renderNutrition();renderSleep();renderSuppl();renderSuivi();
+    }
+  });
+  updateAuthUI();
 }
 
+/* ---- AUTH FUNCTIONS ---- */
 async function authSignUp(){
   const email=document.getElementById('authEmail').value.trim();
   const pwd=document.getElementById('authPassword').value;
@@ -842,40 +829,36 @@ async function authSignUp(){
   const btn=document.getElementById('authSubmitBtn');
   btn.textContent='Création…';btn.disabled=true;
   try{
-    console.log('Signup attempt:', email);
-    const controller=new AbortController();
-    const timeout=setTimeout(()=>controller.abort(),10000);
-    const res=await fetch(SUPABASE_URL+'/auth/v1/signup',{
-      method:'POST',headers:anonHeaders(),
-      body:JSON.stringify({email,password:pwd}),
-      signal:controller.signal
-    });
-    clearTimeout(timeout);
-    console.log('Signup response:', res.status);
-    const d=await res.json();
-    console.log('Signup data:', d);
-    if(!res.ok)throw new Error(d.error_description||d.msg||'Erreur inscription');
-    // Auto-login après signup
-    if(d.access_token){
-      currentUser={id:d.user.id,email:d.user.email,access_token:d.access_token};
-      updateAuthUI();
-      closeModal('modalAuth');
-      // Try to push but don't fail if it doesn't work
-      try{await pushToCloud();}catch(e){console.warn('Initial push failed, will retry later',e);}
-      renderAll();renderSport();
-      toast('Compte créé !','olive','Connecté automatiquement.');
-    } else {
-      okEl.textContent='✓ Compte créé ! Tu es connecté.';
-      setTimeout(()=>closeModal('modalAuth'),1500);
-    }
+    const {error}=await sb.auth.signUp({email,password:pwd});
+    if(error)throw error;
+    okEl.textContent='✓ Compte créé et connecté !';
+    setTimeout(()=>closeModal('modalAuth'),1000);
   }catch(e){
-    console.error('Signup error:', e);
     errEl.textContent=e.message||'Erreur lors de la création du compte.';
   }
   btn.textContent='Créer mon compte';btn.disabled=false;
 }
 
+async function authLogin(){
+  const email=document.getElementById('authEmail').value.trim();
+  const pwd=document.getElementById('authPassword').value;
+  const errEl=document.getElementById('authError');
+  errEl.textContent='';
+  if(!email||!pwd){errEl.textContent='Email et mot de passe requis.';return;}
+  const btn=document.getElementById('authSubmitBtn');
+  btn.textContent='Connexion…';btn.disabled=true;
+  try{
+    const {error}=await sb.auth.signInWithPassword({email,password:pwd});
+    if(error)throw error;
+    closeModal('modalAuth');
+  }catch(e){
+    errEl.textContent=e.message||'Erreur de connexion.';
+  }
+  btn.textContent='Se connecter';btn.disabled=false;
+}
+
 function authLogout(){
+  sb.auth.signOut();
   currentUser=null;
   updateAuthUI();
   toast('Déconnecté','olive','Données locales conservées.');
@@ -886,34 +869,36 @@ async function loadFromCloud(){
   if(!currentUser)return;
   setSyncBadge('syncing');
   try{
-    const res=await fetch(SUPABASE_URL+'/rest/v1/user_data?user_id=eq.'+currentUser.id+'&select=data',{
-      headers:userHeaders()
-    });
-    const rows=await res.json();
-    if(rows&&rows[0]?.data&&Object.keys(rows[0].data).length>0){
-      DATA=Object.assign({},DATA,rows[0].data);
+    const {data,error}=await sb.from('user_data').select('data').eq('user_id',currentUser.id).single();
+    if(error&&error.code!=='PGRST116')throw error;
+    if(data?.data&&Object.keys(data.data).length>0){
+      DATA=Object.assign({},DATA,data.data);
       localStorage.setItem(KEY,JSON.stringify(DATA));
-    } else {
+    }else{
       await pushToCloud();
     }
     setSyncBadge('synced');
-  }catch(e){console.error('loadFromCloud',e);setSyncBadge('error');}
+  }catch(e){
+    console.error('loadFromCloud',e);
+    setSyncBadge('error');
+  }
 }
 
 async function pushToCloud(){
   if(!currentUser)return;
   setSyncBadge('syncing');
   try{
-    const res=await fetch(SUPABASE_URL+'/rest/v1/user_data',{
-      method:'POST',
-      headers:Object.assign(userHeaders(),{
-        'Prefer':'resolution=merge-duplicates'
-      }),
-      body:JSON.stringify({user_id:currentUser.id,data:DATA,updated_at:new Date().toISOString()})
+    const {error}=await sb.from('user_data').upsert({
+      user_id:currentUser.id,
+      data:DATA,
+      updated_at:new Date().toISOString()
     });
-    if(!res.ok){const e=await res.json();throw new Error(JSON.stringify(e));}
+    if(error)throw error;
     setSyncBadge('synced');
-  }catch(e){console.error('pushToCloud',e);setSyncBadge('error');}
+  }catch(e){
+    console.error('pushToCloud',e);
+    setSyncBadge('error');
+  }
 }
 
 function scheduleSync(){
@@ -939,7 +924,6 @@ function updateAuthUI(){
     if(out)out.style.display='none';
     if(inn)inn.style.display='flex';
     if(emailEl)emailEl.textContent=currentUser.email;
-    setSyncBadge('synced');
   }else{
     if(out)out.style.display='flex';
     if(inn)inn.style.display='none';
@@ -1362,6 +1346,9 @@ const SLEEP_LEVERS=[
    INIT
    ============================================================ */
 function init(){
+  // Init Supabase (CDN is loaded)
+  initSupabase();
+  
   load();
   setTodayLabel();
   setGreetingName();
