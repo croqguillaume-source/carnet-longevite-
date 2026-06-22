@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="#2C3A1A"/>
+  
+  <!-- Leaf / plant icon -->
+  <g transform="translate(256,256)">
+    <!-- Stem -->
+    <line x1="0" y1="100" x2="0" y2="-20" stroke="#C8B97A" stroke-width="14" stroke-linecap="round"/>
+    <!-- Left leaf -->
+    <path d="M0,-20 C-20,-80 -100,-90 -110,-40 C-120,10 -60,40 0,-20Z" fill="#6B8F47" opacity="0.9"/>
+    <!-- Right leaf -->
+    <path d="M0,-20 C20,-80 100,-90 110,-40 C120,10 60,40 0,-20Z" fill="#8FB464" opacity="0.9"/>
+    <!-- Top leaf -->
+    <path d="M0,-20 C-30,-100 -20,-150 0,-160 C20,-150 30,-100 0,-20Z" fill="#A8C87A" opacity="0.95"/>
+    <!-- Center dot -->
+    <circle cx="0" cy="-20" r="10" fill="#F4EFE6"/>
+  </g>
+  
+  <!-- Text: CL -->
+  <text x="256" y="430" 
+    font-family="Georgia, serif" 
+    font-size="72" 
+    font-weight="bold"
+    fill="#C8B97A" 
+    text-anchor="middle"
+    letter-spacing="8">CL</text>
+</svg>
