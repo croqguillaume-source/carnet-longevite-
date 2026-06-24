@@ -139,6 +139,79 @@
   .alt-row:hover .alt-name{color:white;}
 
 
+  .recipe-section-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:10px;padding:2px 0;}
+  .recipe-section-toggle:hover{opacity:.85;}
+  /* RECIPE ROWS — version légère */
+  .recipe-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--paper-deep);}
+  .recipe-row:last-of-type{border-bottom:none;}
+  .recipe-row-info{display:flex;flex-direction:column;gap:2px;}
+  .recipe-row-name{font-size:14px;font-weight:600;color:var(--ink);}
+  .recipe-row-meta{font-size:12px;color:var(--muted);}
+  .btn-recipe-toggle{background:var(--paper-deep);border:1px solid var(--line);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--clay-deep);cursor:pointer;white-space:nowrap;transition:.15s;flex-shrink:0;}
+  .btn-recipe-toggle:hover{background:var(--clay);color:white;}
+  .recipe-detail{background:var(--paper-deep);border-radius:8px;padding:14px;margin:6px 0 10px;}
+  .recipe-detail-list{padding-left:18px;}
+  .recipe-detail-list li{font-size:13px;line-height:1.9;color:var(--ink-soft);}
+  .recipe-section-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+  .hors-riz{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--olive);color:var(--paper);border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle;}
+  .rice-result{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+  @media(max-width:500px){.rice-result{grid-template-columns:repeat(3,1fr);}}
+  .rice-stat{background:var(--paper-deep);border-radius:8px;padding:10px 8px;text-align:center;}
+  .rice-val{font-family:var(--display);font-size:22px;font-weight:600;color:var(--olive);}
+  .rice-lbl{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+
+  /* DISH CARDS (nutrition panel) */
+  .dish-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 16px;cursor:pointer;transition:.15s;}
+  .dish-card:hover{background:var(--paper-deep);border-color:var(--muted);}
+  .dish-card-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
+  .dish-emoji{font-size:22px;flex-shrink:0;}
+  .dish-name{font-weight:700;font-size:14.5px;margin-bottom:2px;}
+  .dish-meta{font-size:12px;color:var(--muted);}
+  .dish-btn{flex-shrink:0;white-space:nowrap;}
+  .btn-outline{background:transparent;border:1.5px solid var(--clay-deep);color:var(--clay-deep);border-radius:8px;padding:10px 16px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;width:100%;text-align:center;}
+  .btn-outline:hover{background:var(--clay-deep);color:var(--paper);}
+  /* recipe modal styles */
+  .rm-meta{font-size:12.5px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:14px;}
+  .rm-section{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--clay-deep);margin:14px 0 8px;}
+  .rm-ing{list-style:none;margin:0;padding:0;}
+  .rm-ing li{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed var(--line);font-size:13.5px;gap:12px;}
+  .rm-ing li:last-child{border-bottom:none;}
+  .rm-ing li span{color:var(--muted);font-weight:600;font-size:12px;text-align:right;flex-shrink:0;}
+  .rm-steps{list-style:none;counter-reset:step;margin:0;padding:0;}
+  .rm-steps li{counter-increment:step;padding:6px 0 6px 28px;position:relative;font-size:13.5px;line-height:1.5;border-bottom:1px solid var(--paper-deep);}
+  .rm-steps li:last-child{border-bottom:none;}
+  .rm-steps li::before{content:counter(step);position:absolute;left:0;top:5px;width:20px;height:20px;background:var(--paper);border:1.5px solid var(--sage);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--sage);line-height:1;}
+  .rm-tip{background:rgba(124,138,92,.08);border-left:2px solid var(--sage);padding:10px 12px;margin-top:12px;font-size:12.5px;color:var(--muted);border-radius:2px;}
+  .rm-tip b{color:var(--ink);}
+  .rm-info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:12px;color:var(--muted);}
+  .rm-info b{display:block;color:var(--ink);font-weight:600;margin-bottom:2px;}
+
+  /* RECIPE EXPANDABLE */
+  .recipe-head{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .recipe-toggle{font-size:16px;color:var(--muted);flex-shrink:0;transition:.2s;}
+  .recipe-body{margin-top:14px;border-top:1px solid var(--paper-deep);padding-top:14px;}
+  .recipe-tip{font-size:12.5px;color:var(--olive);font-style:italic;margin-top:12px;padding:8px 12px;background:rgba(107,143,71,.08);border-radius:6px;}
+  .recipe-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:600px){.recipe-cols{grid-template-columns:1fr;}}
+  .recipe-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;}
+  .recipe-ing-list,.recipe-steps-list{padding-left:18px;}
+  .recipe-ing-list li,.recipe-steps-list li{font-size:13px;line-height:1.9;color:var(--ink-soft);}
+  /* BLOOD TEST */
+  .blood-card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px;}
+  .blood-card-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+  .blood-date{font-weight:700;font-size:14px;display:block;}
+  .blood-summary{font-size:12px;color:var(--muted);margin-top:2px;display:block;}
+  .blood-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:14px;}
+  .blood-marker{border-radius:8px;padding:10px;background:var(--paper-deep);}
+  .blood-marker.ok{border-left:3px solid var(--sage);}
+  .blood-marker.warn{border-left:3px solid var(--clay);}
+  .bm-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:4px;}
+  .bm-val{font-size:17px;font-weight:700;color:var(--ink);}
+  .bm-unit{font-size:11px;font-weight:400;color:var(--muted);}
+  .bm-norm{font-size:11px;color:var(--muted);margin-top:3px;}
+  .blood-marker.ok .bm-norm{color:var(--sage);}
+  .blood-marker.warn .bm-norm{color:var(--clay);}
+  .fi-hint{font-size:11px;color:var(--muted);margin-top:3px;display:block;}
   .chart-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;position:relative;}
   .chart-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:8px;}
   .chart-sub{font-size:12.5px;color:var(--muted);margin-bottom:10px;}
@@ -516,51 +589,146 @@
 <!-- =================== NUTRITION =================== -->
 <div class="panel" data-panel="nutrition">
   <div class="sec-label">Module 2</div>
-  <h2>Nutrition — <em>batch et macros</em></h2>
-  <p class="lead">Batch cooking le dimanche en 3h, petits-déjeuners rapides, collations intelligentes. 80% du chemin sans y penser.</p>
+  <h2>Nutrition — <em>simple et efficace</em></h2>
+  <p class="lead">Batch cooking le dimanche en 3h. 80% du temps tu manges bien, 20% tu fais ce que tu veux.</p>
 
   <!-- Macros du jour -->
   <div class="card mb18">
     <h3>Macros du jour</h3>
     <div class="grid g3 mb12">
-      <label class="fld">
-        <span class="lbl">Calories</span>
-        <input type="number" class="fi" id="todayKcal" placeholder="2600" />
-      </label>
-      <label class="fld">
-        <span class="lbl">Protéines (g)</span>
-        <input type="number" class="fi" id="todayProt" placeholder="155" />
-      </label>
-      <label class="fld">
-        <span class="lbl">Verres d'eau</span>
-        <input type="number" class="fi" id="todayWater" placeholder="8" />
-      </label>
+      <label class="fld"><span class="lbl">Calories</span><input type="number" class="fi" id="todayKcal" placeholder="2600"/></label>
+      <label class="fld"><span class="lbl">Protéines (g)</span><input type="number" class="fi" id="todayProt" placeholder="155"/></label>
+      <label class="fld"><span class="lbl">Verres d'eau</span><input type="number" class="fi" id="todayWater" placeholder="8"/></label>
     </div>
     <button class="btn btn-olive btn-sm" onclick="saveTodayMacros()">Enregistrer</button>
-    <div class="help">Cibles : ~2600 kcal · ~150-160 g protéines · 2-2,5 L d'eau (~10 verres).</div>
+    <div class="help">Cibles : ~2600 kcal · ~150-160 g protéines · ~10 verres d'eau.</div>
   </div>
 
-  <!-- Petits déjeuners -->
-  <h3 class="mt22 mb12">Petits-déjeuners — rapides et protéinés</h3>
-  <div id="breakfastList"></div>
+  <!-- ===== BATCH COOKING ===== -->
+  <h3 class="mb4">Batch cooking du dimanche</h3>
+  <p class="help mb14">3 plats pour toute la semaine · préparés en ~3h le dimanche.</p>
 
-  <!-- Collations -->
-  <h3 class="mt22 mb12">Collations malines</h3>
-  <div id="snackList"></div>
+  <div class="dish-card mb8" onclick="openRecipeModal('chili')">
+    <div class="dish-card-left">
+      <span class="dish-emoji">🫘</span>
+      <div>
+        <div class="dish-name">Chili de dinde</div>
+        <div class="dish-meta">12 portions · 410 kcal · 40g prot <span class="hors-riz">hors riz</span></div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm dish-btn">Voir la recette →</button>
+  </div>
 
-  <!-- Recettes batch -->
-  <h3 class="mt22 mb12">Batch cooking dimanche — 3 plats pour la semaine</h3>
-  <div id="recipesList"></div>
+  <div class="dish-card mb8" onclick="openRecipeModal('basquaise')">
+    <div class="dish-card-left">
+      <span class="dish-emoji">🍗</span>
+      <div>
+        <div class="dish-name">Poulet basquaise</div>
+        <div class="dish-meta">10 portions · 380 kcal · 39g prot <span class="hors-riz">hors riz</span></div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm dish-btn">Voir la recette →</button>
+  </div>
+
+  <div class="dish-card mb8" onclick="openRecipeModal('curry')">
+    <div class="dish-card-left">
+      <span class="dish-emoji">🐟</span>
+      <div>
+        <div class="dish-name">Curry de maquereau</div>
+        <div class="dish-meta">4 portions · 475 kcal · 35g prot <span class="hors-riz">hors riz</span></div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm dish-btn">Voir la recette →</button>
+  </div>
+
+  <button class="btn btn-outline btn-block mb14" onclick="openBatchFiche()">
+    📄 Fiche complète des plats — recettes, ingrédients, macros
+  </button>
+
+  <!-- Calculateur riz -->
+  <div class="card mb22">
+    <h3 style="margin-bottom:4px;">🍚 Riz complet — calories à ajouter</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px;">Les macros des plats sont <b>hors riz</b>. Entre le poids de riz <b>cru</b> pour voir ce que ça ajoute à ton repas.</p>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+      <input type="range" id="riceSlider" min="0" max="250" value="80" step="5"
+        style="flex:1;accent-color:var(--olive);cursor:pointer;" oninput="updateRiceCalc(this.value)"/>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <input type="number" id="riceGrams" value="80" min="0" max="500" step="5"
+          class="fi" style="width:68px;text-align:center;"
+          oninput="document.getElementById('riceSlider').value=this.value;updateRiceCalc(this.value)"/>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">g cru</span>
+      </div>
+    </div>
+    <div class="rice-result">
+      <div class="rice-stat"><div class="rice-val" id="riceKcal">280</div><div class="rice-lbl">kcal</div></div>
+      <div class="rice-stat"><div class="rice-val" id="riceCooked">240</div><div class="rice-lbl">g cuit</div></div>
+      <div class="rice-stat"><div class="rice-val" id="riceProt">6</div><div class="rice-lbl">g prot</div></div>
+      <div class="rice-stat"><div class="rice-val" id="riceCarbs">58</div><div class="rice-lbl">g glucides</div></div>
+      <div class="rice-stat"><div class="rice-val" id="riceFiber">1.4</div><div class="rice-lbl">g fibres</div></div>
+    </div>
+    <p class="help" style="margin-top:10px;">Base riz complet cru : 350 kcal · 7g prot · 72g glucides · 1.8g fibres pour 100g. Cuit : volume ×3.</p>
+  </div>
+
+  <!-- ===== PETITS-DÉJEUNERS ===== -->
+  <h3 class="mb4">Petits-déjeuners</h3>
+  <p class="help mb14">En rotation hebdo · ~40-45 g de protéines chacun · 2 à 10 min.</p>
+
+  <div class="dish-card mb8" onclick="openRecipeModal('skyr')">
+    <div class="dish-card-left">
+      <span class="dish-emoji">🥣</span>
+      <div>
+        <div class="dish-name">Bol skyr-flocons</div>
+        <div class="dish-meta">~495 kcal · 40g prot · version overnight possible</div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm dish-btn">Voir la recette →</button>
+  </div>
+
+  <div class="dish-card mb8" onclick="openRecipeModal('oeufs')">
+    <div class="dish-card-left">
+      <span class="dish-emoji">🍳</span>
+      <div>
+        <div class="dish-name">Œufs &amp; fromage blanc</div>
+        <div class="dish-meta">~590 kcal · 44g prot · préparation express</div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm dish-btn">Voir la recette →</button>
+  </div>
+
+  <div class="dish-card mb14" onclick="openRecipeModal('smoothie')">
+    <div class="dish-card-left">
+      <span class="dish-emoji">🥤</span>
+      <div>
+        <div class="dish-name">Smoothie express</div>
+        <div class="dish-meta">~540 kcal · 45g prot · le plus rapide — 2 min</div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-sm dish-btn">Voir la recette →</button>
+  </div>
+
+  <button class="btn btn-outline btn-block mb22" onclick="openBreakfastFiche()">
+    📄 Fiche complète petits-déjeuners — recettes, ingrédients, prép dimanche
+  </button>
+
+  <!-- Plan B -->
+  <div class="dish-card mb8" style="border-left:3px solid var(--olive);background:rgba(60,74,40,.04);">
+    <div class="dish-card-left">
+      <span class="dish-emoji">⚡</span>
+      <div>
+        <div class="dish-name">Plan B — sans préparation</div>
+        <div class="dish-meta">Pain complet · avocat · sardines (huile d'olive + citron) · 2 min</div>
+      </div>
+    </div>
+  </div>
+  <p class="help mb22">Pour les jours sans batch ou sans temps. Les 20% restants ? Fais ce que tu veux — ça ne compte pas si la base est solide.</p>
 
   <!-- Framework -->
-  <h3 class="mt22 mb12">Le framework méditerranéen</h3>
-  <div class="card">
-    <p style="font-size:14px;color:var(--ink-soft);">
-      <b>Base quotidienne :</b> légumes à chaque repas, huile d'olive comme matière grasse principale, poisson 2-3×/semaine, légumineuses, fruits frais, céréales complètes.
-      <br><br><b>À limiter :</b> ultra-transformé, sucres rapides, viande rouge à 1-2×/semaine max.
-      <br><br><b>Boosts :</b> oléagineux (amandes, noix), herbes fraîches, agrumes, ail / oignon.
-      <br><br><b>La règle des 80% :</b> mange parfaitement 80% du temps. Les 20% restants ne comptent pas si la base est solide.
-    </p>
+  <div class="card" style="background:linear-gradient(135deg,#f6faf0,var(--paper));">
+    <div style="font-size:13.5px;color:var(--ink-soft);line-height:1.9;">
+      🫒 <b>Base quotidienne :</b> légumes, huile d'olive, poisson 2-3×/sem, légumineuses, fruits, céréales complètes.<br>
+      ⚠️ <b>À limiter :</b> ultra-transformé, sucres rapides, viande rouge 1-2×/sem max.<br>
+      ✅ <b>Règle des 80% :</b> mange parfaitement 80% du temps. Les 20% restants ? Fais ce que tu veux.
+    </div>
   </div>
 </div>
 
@@ -681,6 +849,80 @@
     <div id="weighHistory"></div>
   </div>
 
+  <!-- Prise de sang -->
+  <hr class="sep"/>
+  <div class="sec-label">Bilan sanguin</div>
+  <h2>Prises de <em>sang</em></h2>
+  <p class="lead">Remplis tes résultats après chaque bilan. Les valeurs normales s'adaptent à ton profil.</p>
+
+  <!-- Profil utilisateur pour les normes -->
+  <div class="card mb18" style="border-left:3px solid var(--clay);">
+    <h3>Ton profil <span style="font-size:12px;font-weight:400;color:var(--muted);">— pour adapter les normes à ta situation</span></h3>
+    <div class="grid g3">
+      <label class="fld">
+        <span class="lbl">Sexe</span>
+        <select class="fi" id="profileSex" onchange="saveProfile()">
+          <option value="">— Choisir —</option>
+          <option value="M">Homme</option>
+          <option value="F">Femme</option>
+        </select>
+      </label>
+      <label class="fld">
+        <span class="lbl">Âge</span>
+        <input type="number" class="fi" id="profileAge" placeholder="25" min="15" max="100" onchange="saveProfile()"/>
+      </label>
+      <label class="fld">
+        <span class="lbl">Poids (kg)</span>
+        <input type="number" class="fi" id="profileWeight" placeholder="75" step="0.5" onchange="saveProfile()"/>
+      </label>
+    </div>
+    <div class="help" style="margin-top:4px;">Utilisé uniquement pour afficher les bonnes valeurs de référence. Pas partagé.</div>
+  </div>
+
+  <div class="card mb18">
+    <h3>Nouveau bilan</h3>
+    <div class="help" style="margin-bottom:14px;">Les normes affichées sont personnalisées selon ton sexe et ton âge (réglages en bas de page).</div>
+      <input type="date" class="fi" id="bloodDate"/>
+    </label>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 8px;">Lipides</div>
+    <div class="grid g3">
+      <label class="fld"><span class="lbl">Cholestérol total (g/L)</span><input type="number" class="fi" id="bCholTotal" step="0.01" placeholder="1.80"/><span class="fi-hint" id="hint-cholTotal">Norme : &lt; 2.0</span></label>
+      <label class="fld"><span class="lbl">HDL — bon chol. (g/L)</span><input type="number" class="fi" id="bHdl" step="0.01" placeholder="0.60"/><span class="fi-hint" id="hint-hdl">Norme : &gt; 0.40</span></label>
+      <label class="fld"><span class="lbl">LDL — mauvais chol. (g/L)</span><input type="number" class="fi" id="bLdl" step="0.01" placeholder="1.10"/><span class="fi-hint" id="hint-ldl">Norme : &lt; 1.60</span></label>
+    </div>
+    <div class="grid g3">
+      <label class="fld"><span class="lbl">Triglycérides (g/L)</span><input type="number" class="fi" id="bTrig" step="0.01" placeholder="0.90"/><span class="fi-hint" id="hint-trig">Norme : &lt; 1.50</span></label>
+      <label class="fld"><span class="lbl">Glycémie à jeun (g/L)</span><input type="number" class="fi" id="bGlycemia" step="0.01" placeholder="0.90"/><span class="fi-hint" id="hint-glycemia">Norme : 0.70–1.10</span></label>
+    </div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 8px;">Vitamines & minéraux</div>
+    <div class="grid g3">
+      <label class="fld"><span class="lbl">Vitamine D (ng/mL)</span><input type="number" class="fi" id="bVitD" step="1" placeholder="40"/><span class="fi-hint" id="hint-vitD">Optimal : 40–80</span></label>
+      <label class="fld"><span class="lbl">Vitamine B12 (pg/mL)</span><input type="number" class="fi" id="bB12" step="1" placeholder="400"/><span class="fi-hint" id="hint-b12">Norme : 200–900</span></label>
+      <label class="fld"><span class="lbl">Fer sérique (µg/dL)</span><input type="number" class="fi" id="bFer" step="1" placeholder="100"/><span class="fi-hint" id="hint-fer">Norme : 65–175</span></label>
+    </div>
+    <div class="grid g3">
+      <label class="fld"><span class="lbl">Ferritine (ng/mL)</span><input type="number" class="fi" id="bFerritine" step="1" placeholder="80"/><span class="fi-hint" id="hint-ferritine">Norme : 30–400</span></label>
+      <label class="fld"><span class="lbl">Magnésium (mmol/L)</span><input type="number" class="fi" id="bMag" step="0.01" placeholder="0.85"/><span class="fi-hint" id="hint-mag">Norme : 0.75–1.0</span></label>
+      <label class="fld"><span class="lbl">TSH — thyroïde (mUI/L)</span><input type="number" class="fi" id="bTsh" step="0.01" placeholder="2.00"/><span class="fi-hint" id="hint-tsh">Norme : 0.40–4.0</span></label>
+    </div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 8px;">Marqueurs inflammatoires</div>
+    <div class="grid g3">
+      <label class="fld"><span class="lbl">CRP — inflammation (mg/L)</span><input type="number" class="fi" id="bCrp" step="0.1" placeholder="1.0"/><span class="fi-hint" id="hint-crp">Optimal : &lt; 1.0</span></label>
+      <label class="fld"><span class="lbl">Testostérone (ng/dL)</span><input type="number" class="fi" id="bTesto" step="1" placeholder="500"/><span class="fi-hint" id="hint-testo">Norme : 300–1000</span></label>
+    </div>
+    <label class="fld" style="margin-top:8px;">
+      <span class="lbl">Notes libres</span>
+      <textarea class="fi" id="bloodNotes" rows="2" placeholder="Ex : bilan à jeun, médecin recommande supplémenter vitamine D…"></textarea>
+    </label>
+    <button class="btn btn-primary mt14" onclick="saveBloodTest()">Enregistrer ce bilan</button>
+  </div>
+
+  <!-- Historique bilans -->
+  <div class="card mb18" id="bloodHistory">
+    <h3>Historique des bilans</h3>
+    <div id="bloodHistoryList"><p style="font-size:13px;color:var(--muted);font-style:italic;">Aucun bilan enregistré.</p></div>
+  </div>
+
   <!-- Réglages -->
   <hr class="sep" />
   <h3>Réglages & données</h3>
@@ -693,6 +935,21 @@
       <label class="fld"><span class="lbl">Cible calories</span><input type="number" class="fi" id="setKcal" placeholder="2600" /></label>
       <label class="fld"><span class="lbl">Cible protéines (g)</span><input type="number" class="fi" id="setProt" placeholder="155" /></label>
       <label class="fld"><span class="lbl">Cible sommeil (h)</span><input type="number" class="fi" id="setSleep" step="0.25" placeholder="7.5" /></label>
+    </div>
+    <div class="grid g2" style="margin-top:10px;">
+      <label class="fld">
+        <span class="lbl">Sexe biologique</span>
+        <select class="fi" id="setSex">
+          <option value="M">Homme</option>
+          <option value="F">Femme</option>
+        </select>
+        <span class="fi-hint">Utilisé pour personnaliser les normes de prise de sang.</span>
+      </label>
+      <label class="fld">
+        <span class="lbl">Âge</span>
+        <input type="number" class="fi" id="setAge" placeholder="25" min="16" max="100"/>
+        <span class="fi-hint">Utilisé pour adapter certaines normes (LDL, TSH).</span>
+      </label>
     </div>
     <button class="btn btn-olive btn-sm" onclick="saveSettings()">Enregistrer les réglages</button>
     <hr class="sep" />
@@ -720,6 +977,20 @@
     <div class="f-meta">Carnet global · Routine Longévité · Inspiré du protocole SSN</div>
   </div>
 </footer>
+
+<!-- MODAL : RECETTE INDIVIDUELLE -->
+<div class="modal-bg" id="modalRecipe">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-head">
+      <h3 id="modalRecipeTitle">·</h3>
+      <button class="modal-close" onclick="closeModal('modalRecipe')">×</button>
+    </div>
+    <div class="modal-body" id="modalRecipeBody"></div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="closeModal('modalRecipe')">Fermer</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL : AUTH -->
 <div class="modal-bg" id="modalAuth">
@@ -789,9 +1060,10 @@ const KEY='carnet_longevite_v1';
 let DATA={
   version:1,
   name:'',
-  settings:{kcal:2600,prot:155,sleep:7.5},
+  settings:{kcal:2600,prot:155,sleep:7.5,sex:'M',age:25},
   // userProgram: array of 7 items [lun..dim], each = program key or 'repos'
   userProgram:['course','push_a','pull_a','legs','repos','push_b','pull_b'],
+  profile:{sexe:'M',age:null},
   days:{},
   sessions:[],
   weighIns:[],
@@ -923,42 +1195,6 @@ function scheduleSync(){
   setSyncBadge('syncing');
   syncTimer=setTimeout(pushToCloud,1800);
 }
-
-/* ---- UI ---- */
-function setSyncBadge(status){
-  const el=document.getElementById('syncBadge');
-  if(!el)return;
-  el.className='sync-badge '+status;
-  el.textContent=status==='syncing'?'⟳ Sync…':status==='synced'?'✓ Sauvegardé':'⚠ Erreur';
-}
-
-function updateAuthUI(){
-  const out=document.getElementById('authLoggedOut');
-  const inn=document.getElementById('authLoggedIn');
-  const emailEl=document.getElementById('authUserEmail');
-  if(currentUser){
-    if(out)out.style.display='none';
-    if(inn)inn.style.display='flex';
-    if(emailEl)emailEl.textContent=currentUser.email;
-  }else{
-    if(out)out.style.display='flex';
-    if(inn)inn.style.display='none';
-  }
-}
-
-function switchAuthMode(){
-  authMode=authMode==='login'?'signup':'login';
-  document.getElementById('authModalTitle').textContent=authMode==='login'?'Connexion':'Créer un compte';
-  document.getElementById('authSubmitBtn').textContent=authMode==='login'?'Se connecter':'Créer mon compte';
-  document.getElementById('authSubmitBtn').onclick=authMode==='login'?authLogin:authSignUp;
-  document.getElementById('authToggleText').innerHTML=authMode==='login'?
-    'Pas encore de compte ? <span onclick="switchAuthMode()">Créer un compte</span>':
-    'Déjà un compte ? <span onclick="switchAuthMode()">Se connecter</span>';
-  document.getElementById('authError').textContent='';
-  document.getElementById('authOk').textContent='';
-}
-
-
 
 /* Sync status */
 function setSyncBadge(status){
@@ -1330,9 +1566,66 @@ const KEY_LIFTS=[
    RECIPES
    ============================================================ */
 const RECIPES=[
-  {name:'Chili maison',meta:'~6 portions · ~600 kcal/portion · 40g prot',ing:['600 g viande hachée (5%)','2 boîtes haricots rouges','2 boîtes tomates concassées','2 oignons','3 gousses d\'ail','Cumin, paprika, chili, origan','Huile d\'olive']},
-  {name:'Poulet basquaise',meta:'~6 portions · ~550 kcal/portion · 42g prot',ing:['1 kg poulet (cuisses ou blancs)','3 poivrons','3 tomates','2 oignons','3 gousses d\'ail','Piment d\'Espelette, thym','Huile d\'olive']},
-  {name:'Curry de maquereau allégé',meta:'~6 portions · ~620 kcal/portion · 38g prot',ing:['600 g filets de maquereau','1 oignon','2 c.s. pâte de curry','400 ml lait de coco light','1 boîte pois chiches','Coriandre fraîche','Citron vert']}
+  {
+    name:'Chili maison',
+    meta:'~6 portions · ~600 kcal/portion · 40g prot',
+    emoji:'🫘',
+    prep:'15 min',
+    cook:'40 min',
+    ing:['600 g viande hachée (5%)','2 boîtes haricots rouges','2 boîtes tomates concassées','2 oignons','3 gousses d\'ail','1 c.s. cumin','1 c.s. paprika','1 c.c. chili','1 c.c. origan séché','Huile d\'olive, sel, poivre'],
+    steps:['Épluche et émince les oignons et l\'ail. Fais-les revenir à feu moyen dans 2 c.s. d\'huile d\'olive pendant 5 min.','Ajoute la viande hachée. Monte à feu vif et fais-la dorer 5-7 min en remuant. Assaisonne avec sel et poivre.','Ajoute toutes les épices (cumin, paprika, chili, origan). Mélange bien pendant 1 min pour les faire "bloomer".','Verse les tomates concassées et les haricots rouges égouttés. Mélange.','Baisse à feu doux, couvre et laisse mijoter 25-30 min. Goûte et rectifie l\'assaisonnement.','Laisse refroidir avant de mettre en barquettes. Se conserve 5 jours au frigo, 3 mois au congélateur.'],
+    tip:'Prépare-le le dimanche soir. Plus il repose, meilleur c\'est. Sers avec du riz ou du pain complet.'
+  },
+  {
+    name:'Poulet basquaise',
+    meta:'~6 portions · ~550 kcal/portion · 42g prot',
+    emoji:'🍗',
+    prep:'20 min',
+    cook:'45 min',
+    ing:['1 kg cuisses de poulet désossées (ou blancs)','3 poivrons (1 rouge, 1 vert, 1 jaune)','3 tomates mûres (ou 1 boîte tomates concassées)','2 oignons','3 gousses d\'ail','Piment d\'Espelette, thym, laurier','Huile d\'olive, sel, poivre'],
+    steps:['Coupe les poivrons en lamelles, les oignons en demi-rondelles, l\'ail en tranches. Réserve.','Fais dorer le poulet dans l\'huile chaude 3-4 min par face. Sors-le et réserve.','Dans la même poêle, fais revenir oignons et ail 5 min. Ajoute les poivrons, cuis encore 5-8 min.','Ajoute les tomates, le thym, le laurier et le piment d\'Espelette. Mélange bien.','Repose le poulet dans la sauce. Couvre et laisse mijoter 30 min à feu doux.','Goûte, rectifie l\'assaisonnement. Retire le laurier. Laisse refroidir avant de portionner.'],
+    tip:'Excellent avec du riz complet ou des pommes de terre vapeur. La sauce se congèle parfaitement.'
+  },
+  {
+    name:'Curry de maquereau',
+    meta:'~6 portions · ~620 kcal/portion · 38g prot',
+    emoji:'🐟',
+    prep:'10 min',
+    cook:'25 min',
+    ing:['600 g filets de maquereau frais ou surgelés','1 oignon','2 gousses d\'ail','2 c.s. pâte de curry (vert ou rouge)','400 ml lait de coco light','1 boîte pois chiches égouttés','½ citron vert','Coriandre fraîche','Huile de coco ou olive'],
+    steps:['Émince l\'oignon et l\'ail. Fais-les revenir dans l\'huile 4-5 min à feu moyen.','Ajoute la pâte de curry. Fais-la revenir 1 min en remuant pour la faire chauffer.','Verse le lait de coco. Mélange bien, porte à légère ébullition.','Ajoute les pois chiches. Laisse mijoter 5 min.','Coupe les filets de maquereau en morceaux. Ajoute dans la sauce, cuis 7-10 min à feu doux.','Presse le citron vert, ajoute la coriandre fraîche ciselée. Rectifie l\'assaisonnement.'],
+    tip:'Maquereau = poisson le moins cher ET le plus riche en oméga-3. Évite la capsule oméga-3 ce jour-là.'
+  },
+  {
+    name:'Riz complet sauté aux légumes & œufs',
+    meta:'~5 portions · ~520 kcal/portion · 28g prot',
+    emoji:'🍳',
+    prep:'15 min',
+    cook:'20 min',
+    ing:['400 g riz complet cuit (la veille ou batch)','4 œufs','2 carottes','2 courgettes','1 poivron rouge','100 g edamame ou petits pois surgelés','3 c.s. sauce soja','1 c.s. huile de sésame','2 gousses d\'ail','Gingembre frais (optionnel)','Graines de sésame'],
+    steps:['Coupe les légumes en petits dés réguliers. Émince l\'ail et le gingembre.','Fais chauffer un wok ou grande poêle à feu très vif. Ajoute l\'huile de sésame.','Fais revenir l\'ail et le gingembre 30 sec. Ajoute les carottes, cuis 3 min.','Ajoute courgettes et poivron, cuis 3-4 min en remuant. Ajoute les edamame.','Pousse les légumes sur le côté, casse les œufs au centre. Brouille-les rapidement.','Ajoute le riz froid. Mélange tout, verse la sauce soja. Cuis encore 3 min à feu vif.','Parsème de graines de sésame. Goûte et rectifie.'],
+    tip:'Le secret : riz froid et feu très vif. Avec du riz chaud ça devient pâteux.'
+  },
+  {
+    name:'Soupe lentilles corail & épinards',
+    meta:'~6 portions · ~380 kcal/portion · 22g prot',
+    emoji:'🍵',
+    prep:'10 min',
+    cook:'30 min',
+    ing:['300 g lentilles corail','200 g épinards frais ou surgelés','1 boîte tomates concassées','2 oignons','3 gousses d\'ail','1 c.s. cumin','1 c.c. curcuma','1 c.c. coriandre moulue','1 citron (jus)','1,5 L bouillon légumes ou eau','Huile d\'olive, sel, poivre'],
+    steps:['Émince les oignons et l\'ail. Fais-les revenir dans l\'huile 5 min.','Ajoute les épices. Fais-les revenir 1 min en remuant.','Ajoute les lentilles corail (pas besoin de les tremper). Mélange bien.','Verse les tomates et le bouillon. Porte à ébullition.','Baisse à feu doux, couvre et laisse cuire 20-25 min jusqu\'à ce que les lentilles soient fondantes.','Ajoute les épinards, laisse cuire 3 min. Presse le citron. Mixe partiellement si tu veux une texture crémeuse.'],
+    tip:'Très économique, très protéiné, très satiétant. Parfait pour les soirs de semaine fatigués.'
+  },
+  {
+    name:'Filet de saumon citron-herbes',
+    meta:'~4 portions · ~480 kcal/portion · 44g prot',
+    emoji:'🐠',
+    prep:'10 min',
+    cook:'20 min',
+    ing:['4 filets de saumon (150 g chacun)','2 citrons','4 gousses d\'ail','Aneth frais ou thym','2 c.s. huile d\'olive','Sel, poivre, paprika fumé'],
+    steps:['Préchauffe le four à 200°C. Dispose les filets dans un plat huilé.','Mélange huile d\'olive, jus d\'un citron, ail émincé, sel, poivre, paprika.','Badigeonne généreusement les filets de ce mélange.','Dispose des rondelles de citron par-dessus. Parsème d\'aneth.','Enfourne 15-18 min selon l\'épaisseur. Le saumon doit être encore légèrement nacré au centre.','Laisse reposer 2 min avant de portionner. Sers avec des légumes vapeur ou une salade.'],
+    tip:'Prépare en double et mange froid le lendemain. Excellent en salade avec quinoa et avocat.'
+  }
 ];
 
 /* ============================================================
@@ -1369,6 +1662,7 @@ function init(){
   setTodayLabel();
   setGreetingName();
   document.getElementById('weighDate').value=todayKey();
+  document.getElementById('bloodDate').value=todayKey();
   setCurrentRoutineDay(new Date());
   bindTabs();
   renderAll();
@@ -1387,6 +1681,8 @@ function setGreetingName(){
   document.getElementById('setKcal').value=DATA.settings.kcal||2600;
   document.getElementById('setProt').value=DATA.settings.prot||155;
   document.getElementById('setSleep').value=DATA.settings.sleep||7.5;
+  document.getElementById('setSex').value=DATA.settings.sex||'M';
+  document.getElementById('setAge').value=DATA.settings.age||25;
 }
 
 /* ============================================================
@@ -2134,45 +2430,92 @@ function deleteCurrentSession(){
    NUTRITION PANEL
    ============================================================ */
 function renderNutrition(){
-  /* macros du jour */
   const k=todayKey();
   ensureDay(k);
   const m=DATA.days[k].macros||{};
   document.getElementById('todayKcal').value=m.kcal||'';
   document.getElementById('todayProt').value=m.prot||'';
   document.getElementById('todayWater').value=m.water||'';
-
-  /* breakfasts */
-  const bHost=document.getElementById('breakfastList');
-  if(bHost) bHost.innerHTML=BREAKFASTS.map(b=>
-    '<div class="recipe-card">'+
-    '<div class="recipe-head">'+
-      '<h4>'+b.name+'</h4>'+
-      '<span class="recipe-meta">⏱ '+b.time+' · '+b.kcal+'</span>'+
-    '</div>'+
-    '<div class="recipe-list"><b>Ingrédients :</b><ul>'+b.items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div>'+
-    '<div style="margin-top:8px;font-size:12.5px;color:var(--olive);font-style:italic;">💡 '+b.note+'</div>'+
-    '</div>').join('');
-
-  /* snacks */
-  const sHost=document.getElementById('snackList');
-  if(sHost) sHost.innerHTML=SNACKS.map(s=>
-    '<div class="recipe-card">'+
-    '<div class="recipe-head">'+
-      '<h4>'+s.name+'</h4>'+
-      '<span class="recipe-meta">'+s.timing+' · '+s.kcal+'</span>'+
-    '</div>'+
-    '<div class="recipe-list"><b>Composition :</b><ul>'+s.items.map(i=>'<li>'+i+'</li>').join('')+'</ul></div>'+
-    '<div style="margin-top:8px;font-size:12.5px;color:var(--olive);font-style:italic;">💡 '+s.note+'</div>'+
-    '</div>').join('');
-
-  /* recettes */
-  document.getElementById('recipesList').innerHTML=RECIPES.map(r=>
-    '<div class="recipe-card">'+
-    '<div class="recipe-head"><h4>'+r.name+'</h4><span class="recipe-meta">'+r.meta+'</span></div>'+
-    '<div class="recipe-list"><b>Ingrédients :</b><ul>'+r.ing.map(i=>'<li>'+i+'</li>').join('')+'</ul></div>'+
-    '</div>').join('');
 }
+
+/* ---- INDIVIDUAL RECIPE DATA ---- */
+const RECIPE_DATA={
+  chili:{emoji:'🫘',title:'Chili de dinde',
+    meta:'12 portions · 410 kcal · 40g P · 13g L · 32g C par portion',
+    time:'~50-55 min',conservation:'Frigo 4 jours · Congèle ✓',
+    ing:[{n:'Dinde hachée',q:'1,8 kg'},{n:'Haricots rouges (boîtes)',q:'5 boîtes'},{n:'Tomates concassées (boîtes)',q:'5 boîtes'},{n:'Oignons',q:'3 moyens'},{n:'Ail',q:'5 gousses'},{n:"Huile d'olive",q:'4 c.à.s.'},{n:'Cumin',q:'2 c.à.c.'},{n:'Paprika fumé',q:'2 c.à.c.'},{n:'Origan séché',q:'1 c.à.c.'},{n:'Sel, poivre',q:'à goût'}],
+    steps:['Égoutter et rincer les haricots rouges.','Émincer les oignons, écraser ou hacher l\'ail.','Dans un grand faitout, chauffer l\'huile. Faire revenir oignons + ail 2-3 min.','Ajouter la dinde hachée. Cuire à feu vif ~8-10 min en émiettant bien jusqu\'à coloration.','Ajouter tomates concassées, haricots égouttés et toutes les épices. Bien mélanger.','Couvrir, réduire à feu doux. Mijoter 30-35 min en remuant occasionnellement.','Goûter, rectifier sel et poivre. Laisser refroidir avant de portionner.'],
+    tip:'Servir sur du riz complet cuit à part (~160g sec pour 12 portions).'},
+  basquaise:{emoji:'🍗',title:'Poulet basquaise',
+    meta:'10 portions · 380 kcal · 39g P · 17g L · 18g C par portion',
+    time:'~60-65 min',conservation:'Frigo 3-4 jours · Congèle ✓',
+    ing:[{n:'Hauts de cuisse désossés',q:'1,9 kg'},{n:'Poivrons rouges ou mélangés',q:'5 moyens'},{n:'Tomates concassées (boîtes)',q:'5 boîtes'},{n:'Oignons',q:'3 moyens'},{n:'Ail',q:'4 gousses'},{n:"Huile d'olive",q:'4 c.à.s.'},{n:'Paprika doux',q:'2 c.à.c.'},{n:"Piment d'Espelette",q:'1 c.à.c. (optionnel)'},{n:'Herbes de Provence',q:'1 c.à.c.'},{n:'Sel, poivre',q:'à goût'}],
+    steps:['Couper le poulet en morceaux ~5-6 cm. Saler et poivrer.','Faire dorer le poulet dans l\'huile 8-10 min à feu vif. Réserver.','Dans le même faitout, faire revenir oignons 2 min, puis poivrons en lanières 5-6 min.','Ajouter ail haché, paprika, piment, herbes. Mélanger 30 sec.','Remettre le poulet. Verser les 5 boîtes de tomates concassées.','Couvrir, mijoter à feu doux-moyen 35-40 min jusqu\'à poulet très tendre.','Goûter, rectifier. La sauce doit être onctueuse.'],
+    tip:'Riz commun (~160g sec pour 10 portions). Les poivrons sont le cœur du plat — ne pas les sous-cuire.'},
+  curry:{emoji:'🐟',title:'Curry de maquereau',
+    meta:'4 portions · 475 kcal · 35g P · 32g L · 11g C par portion',
+    time:'~35-40 min',conservation:'Frigo 3 jours (pas de congélation)',
+    ing:[{n:'Filets de maquereau frais',q:'1,3 kg'},{n:'Lait de coco allégé (boîtes 400ml)',q:'2 boîtes'},{n:'Tomates concassées (boîtes)',q:'2 boîtes'},{n:'Oignon moyen',q:'1'},{n:'Ail',q:'2 gousses'},{n:'Gingembre frais',q:'~20g'},{n:'Pâte de curry rouge ou jaune',q:'3-4 c.à.s.'},{n:'Épinards frais',q:'1 sac (~250g)'},{n:"Huile d'olive",q:'1 c.à.s.'},{n:'Sel, poivre',q:'à goût'}],
+    steps:['Émincer l\'oignon, écraser l\'ail, râper le gingembre.','Faire revenir oignon dans l\'huile 1-2 min. Ajouter ail + gingembre, 1 min.','Ajouter la pâte de curry. Faire frire 1-2 min pour libérer les arômes.','Ajouter les tomates concassées. Mélanger, laisser frémir 5 min.','Verser le lait de coco. Bien mélanger.','Ajouter les filets de maquereau en morceaux. Frémir doucement 6-8 min sans trop remuer.','Ajouter les épinards. Remuer délicatement 2-3 min.','Goûter, rectifier.'],
+    tip:'Le maquereau cuit très vite — ne pas dépasser 8 min. Le gingembre frais est important.'},
+  skyr:{emoji:'🥣',title:'Bol skyr-flocons',
+    meta:'~495 kcal · 40g protéines',
+    time:'2 min (ou overnight la veille)',conservation:'Bocal overnight : 2-3 jours frigo',
+    ing:[{n:'Skyr ou fromage blanc 0%',q:'250g'},{n:"Flocons d'avoine",q:'60g'},{n:'Fruits rouges (frais ou surgelés)',q:'1 poignée'},{n:'Beurre de cacahuète',q:'1 c.à.s.'},{n:'Miel ou sirop (optionnel)',q:'à goût'}],
+    steps:['Verser le skyr dans un bol.','Ajouter les flocons d\'avoine.','Parsemer de fruits rouges.','Ajouter 1 c.à.s. de beurre de cacahuète.','Mélanger légèrement ou servir stratifié.'],
+    tip:'Version overnight : mélange tout (sauf le beurre de cacahuète) la veille dans un bocal. Le matin, tu ajoutes juste le beurre — 30 sec.'},
+  oeufs:{emoji:'🍳',title:'Œufs & fromage blanc',
+    meta:'~590 kcal · 44g protéines',
+    time:'4 min (2 min si œufs durs préparés)',conservation:'Œufs durs : toute la semaine frigo',
+    ing:[{n:'Œufs',q:'3'},{n:'Fromage blanc 0%',q:'200g'},{n:'Pain complet',q:'2 tranches'},{n:'Avocat',q:'½'},{n:"Huile d'olive",q:'1 c.à.c.'},{n:'Sel, poivre',q:'à goût'}],
+    steps:['Cuire les 3 œufs à la poêle (brouillés ou au plat).','Toaster les 2 tranches de pain pendant que les œufs cuisent.','Saler et poivrer les œufs.','Servir avec le fromage blanc, le pain et le demi-avocat.'],
+    tip:'Version express : avec les œufs durs préparés le dimanche, plus rien à cuire. Écale 3 œufs, assemble — 2 min top chrono.'},
+  smoothie:{emoji:'🥤',title:'Smoothie express',
+    meta:'~540 kcal · 45g protéines',
+    time:'2 min',conservation:'À consommer frais',
+    ing:[{n:'Lait demi-écrémé ou skyr',q:'200ml'},{n:'Whey protéine',q:'1 dose (~30g)'},{n:'Banane',q:'1'},{n:"Flocons d'avoine",q:'40g'},{n:'Beurre de cacahuète',q:'1 c.à.s.'}],
+    steps:['Verser le lait ou skyr dans le blender.','Ajouter la dose de whey.','Ajouter la banane en morceaux.','Ajouter flocons et beurre de cacahuète.','Mixer 30-40 sec. Ajouter un peu d\'eau si trop épais.'],
+    tip:'Le plus rapide de tous : tout frais, tout au blender, 2 min. Aucune prép la veille.'},
+};
+
+function openRecipeModal(key){
+  const r=RECIPE_DATA[key];
+  if(!r)return;
+  document.getElementById('modalRecipeTitle').textContent=r.emoji+' '+r.title;
+  document.getElementById('modalRecipeBody').innerHTML=
+    '<div class="rm-meta">'+r.meta+'</div>'+
+    '<div class="rm-section">Ingrédients</div>'+
+    '<ul class="rm-ing">'+r.ing.map(i=>'<li>'+i.n+'<span>'+i.q+'</span></li>').join('')+'</ul>'+
+    '<div class="rm-section">Préparation</div>'+
+    '<ol class="rm-steps">'+r.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol>'+
+    '<div class="rm-tip"><b>💡 Astuce : </b>'+r.tip+'</div>'+
+    '<div class="rm-info"><div><b>Temps</b>'+r.time+'</div><div><b>Conservation</b>'+r.conservation+'</div></div>';
+  openModal('modalRecipe');
+}
+
+function openBatchFiche(){
+  const css=':root{--paper:#F2ECDF;--card:#FBF8F0;--ink:#23271C;--olive:#3C4A28;--clay:#B05634;--sage:#7C8A5C;--line:#D8CFB9;--muted:#6B6A53;}*{box-sizing:border-box;margin:0;padding:0;}body{background:var(--paper);color:var(--ink);font-family:\'Hanken Grotesk\',-apple-system,sans-serif;line-height:1.5;}@media print{body{background:#fff;font-size:13px;}}.container{max-width:1000px;margin:0 auto;padding:24px;}@media print{.container{padding:0;}}.header{text-align:center;margin-bottom:26px;border-bottom:2px solid var(--olive);padding-bottom:18px;}.header h1{font-family:\'Fraunces\',Georgia,serif;font-weight:600;font-size:2.1rem;color:var(--olive);margin-bottom:4px;}.header p{font-size:.9rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}.recipes{display:grid;grid-template-columns:1fr;gap:22px;}@media(min-width:860px){.recipes{grid-template-columns:1fr 1fr;}}@media print{.recipes{grid-template-columns:1fr 1fr;gap:12px;}}.recipe{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;page-break-inside:avoid;}.recipe-top{border-bottom:3px solid;padding-bottom:12px;margin-bottom:14px;}.recipe-top.chili{border-color:var(--clay);}.recipe-top.basquaise{border-color:var(--sage);}.recipe-top.curry{border-color:var(--olive);}.recipe h2{font-family:\'Fraunces\',Georgia,serif;font-weight:600;font-size:1.35rem;line-height:1.1;margin-bottom:6px;}.recipe-meta{font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}.recipe-meta b{color:var(--ink);}.sec{font-family:\'Fraunces\',Georgia,serif;font-weight:600;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--clay);margin:12px 0 8px;}.ing-list{list-style:none;}.ing-list li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed var(--line);font-size:.87rem;}.ing-list li:last-child{border-bottom:none;}.ing-list li span{color:var(--muted);font-weight:600;font-size:.78rem;}.steps-list{list-style:none;counter-reset:s;}.steps-list li{counter-increment:s;padding:6px 0 6px 26px;position:relative;font-size:.84rem;line-height:1.4;}.steps-list li::before{content:counter(s);position:absolute;left:0;top:4px;width:18px;height:18px;background:var(--paper);border:1.5px solid var(--sage);border-radius:50%;font-size:.68rem;font-weight:700;color:var(--sage);display:flex;align-items:center;justify-content:center;}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:.78rem;color:var(--muted);}.info-grid b{display:block;color:var(--ink);font-weight:600;margin-bottom:1px;}.tip{background:rgba(124,138,92,.08);border-left:2px solid var(--sage);padding:9px 12px;margin-top:10px;font-size:.78rem;color:var(--muted);}.tip b{color:var(--ink);}.full-w{grid-column:1/-1;max-width:600px;}.footer{text-align:center;font-size:.8rem;color:var(--muted);margin-top:26px;padding-top:16px;border-top:1px solid var(--line);}@media print{.recipe{padding:13px;border-radius:0;}.recipe h2{font-size:1.15rem;}.sec{font-size:.75rem;}.ing-list li,.steps-list li{font-size:.78rem;}.tip{font-size:.72rem;}}';
+  const d=RECIPE_DATA;
+  function card(cls,r){return '<div class="recipe"><div class="recipe-top '+cls+'"><h2>'+r.emoji+' '+r.title+'</h2><div class="recipe-meta"><b>'+r.meta+'</b></div></div><div class="sec">Ingrédients</div><ul class="ing-list">'+r.ing.map(i=>'<li>'+i.n+'<span>'+i.q+'</span></li>').join('')+'</ul><div class="sec">Préparation</div><ol class="steps-list">'+r.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="info-grid"><div><b>Temps</b>'+r.time+'</div><div><b>Conservation</b>'+r.conservation+'</div></div><div class="tip"><b>💡 Astuce : </b>'+r.tip+'</div></div>';}
+  const html='<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Les 3 plats batch — Recettes complètes</title><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"/><style>'+css+'</style></head><body><div class="container"><div class="header"><h1>Les 3 plats batch</h1><p>Recettes complètes · Détaillées · Prêtes à cuisiner</p></div><div class="recipes">'+card('chili',d.chili)+card('basquaise',d.basquaise)+'</div><div class="recipes" style="margin-top:22px;"><div class="recipe full-w">'+card('curry',d.curry).replace('<div class="recipe">','').replace('</div>','')+' </div></div><div class="footer"><p><strong>🔄 Rotation hebdo : 2 plats en alternance.</strong></p><p>Riz commun : ~160g sec par semaine cuit à part.</p></div></div><script>window.print();<\/script></body></html>';
+  const w=window.open('','_blank');w.document.write(html);w.document.close();
+}
+
+function openBreakfastFiche(){
+  const css=':root{--paper:#F2ECDF;--card:#FBF8F0;--ink:#23271C;--olive:#3C4A28;--clay:#B05634;--sage:#7C8A5C;--line:#D8CFB9;--muted:#6B6A53;}*{box-sizing:border-box;margin:0;padding:0;}body{background:var(--paper);color:var(--ink);font-family:\'Hanken Grotesk\',-apple-system,sans-serif;line-height:1.5;}@media print{body{background:#fff;font-size:13px;}}.container{max-width:980px;margin:0 auto;padding:20px;}@media print{.container{padding:0;}}.header{text-align:center;margin-bottom:22px;border-bottom:2px solid var(--olive);padding-bottom:16px;}.header h1{font-family:\'Fraunces\',Georgia,serif;font-weight:600;font-size:2.1rem;color:var(--olive);margin-bottom:4px;}.header p{font-size:.9rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}.prep{background:var(--olive);color:var(--paper);border-radius:8px;padding:16px 20px;margin-bottom:20px;}.prep h3{font-family:\'Fraunces\',Georgia,serif;font-weight:600;font-size:1.05rem;margin-bottom:8px;color:#fff;}.prep-grid{display:grid;grid-template-columns:1fr;gap:8px;}@media(min-width:700px){.prep-grid{grid-template-columns:1fr 1fr 1fr;}}@media print{.prep-grid{grid-template-columns:1fr 1fr 1fr;}}.prep-item{font-size:.8rem;line-height:1.45;color:rgba(242,236,223,.9);}.prep-item b{display:block;color:#E8B896;font-family:\'Fraunces\',Georgia,serif;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;}.recipes{display:grid;grid-template-columns:1fr;gap:18px;}@media(min-width:800px){.recipes{grid-template-columns:1fr 1fr 1fr;}}@media print{.recipes{grid-template-columns:1fr 1fr 1fr;gap:10px;}}.recipe{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;page-break-inside:avoid;display:flex;flex-direction:column;}.recipe-top{border-bottom:3px solid;padding-bottom:10px;margin-bottom:12px;}.recipe-top.skyr{border-color:var(--sage);}.recipe-top.oeufs{border-color:var(--clay);}.recipe-top.smoothie{border-color:var(--olive);}.recipe h2{font-family:\'Fraunces\',Georgia,serif;font-weight:600;font-size:1.25rem;margin-bottom:5px;}.recipe-meta{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}.recipe-meta b{color:var(--ink);}.sec{font-family:\'Fraunces\',Georgia,serif;font-weight:600;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--clay);margin:11px 0 7px;}.ing-list{list-style:none;}.ing-list li{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:.87rem;}.cb{width:13px;height:13px;border:1px solid var(--sage);border-radius:2px;flex-shrink:0;}.qty{color:var(--muted);font-weight:600;font-size:.78rem;margin-left:auto;white-space:nowrap;}.steps-list{list-style:none;counter-reset:s;}.steps-list li{counter-increment:s;padding:5px 0 5px 24px;position:relative;font-size:.83rem;line-height:1.4;}.steps-list li::before{content:counter(s);position:absolute;left:0;top:4px;width:17px;height:17px;background:var(--paper);border:1.5px solid var(--sage);border-radius:50%;font-size:.68rem;font-weight:700;color:var(--sage);display:flex;align-items:center;justify-content:center;}.tip{background:rgba(124,138,92,.08);border-left:2px solid var(--sage);padding:8px 11px;margin-top:auto;font-size:.78rem;color:var(--muted);}.tip b{color:var(--ink);}.footer{text-align:center;font-size:.8rem;color:var(--muted);margin-top:22px;padding-top:16px;border-top:1px solid var(--line);}@media print{.prep{padding:10px 14px;margin-bottom:12px;}.recipe{padding:12px;}.recipe h2{font-size:1.1rem;}.sec{font-size:.72rem;}.ing-list li,.steps-list li{font-size:.76rem;}.tip{font-size:.72rem;}.footer{margin-top:12px;}}';
+  const d=RECIPE_DATA;
+  function bcard(cls,r){return '<div class="recipe"><div class="recipe-top '+cls+'"><h2>'+r.emoji+' '+r.title+'</h2><div class="recipe-meta"><b>'+r.meta+'</b></div></div><div class="sec">Ingrédients</div><ul class="ing-list">'+r.ing.map(i=>'<li><div class="cb"></div>'+i.n+'<span class="qty">'+i.q+'</span></li>').join('')+'</ul><div class="sec">Préparation</div><ol class="steps-list">'+r.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="tip"><b>💡 </b>'+r.tip+'</div></div>';}
+  const html='<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Les 3 petits-déjeuners — Fiche cuisine</title><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"/><style>'+css+'</style></head><body><div class="container"><div class="header"><h1>Les 3 petits-déjeuners</h1><p>Rotation hebdo · ~40-45 g de protéines chacun</p></div><div class="prep"><h3>⏱ La prép du dimanche (5 min)</h3><div class="prep-grid"><div class="prep-item"><b>Semaine skyr</b>Monte 2-3 bocaux d\'overnight oats (skyr + flocons + fruits). Tient 2-3 jours. Beurre de cacahuète ajouté le matin.</div><div class="prep-item"><b>Semaine œufs</b>Fais cuire 12 œufs durs d\'un coup. Ils tiennent toute la semaine au frigo. Le matin : assemblage en 2 min.</div><div class="prep-item"><b>Semaine smoothie</b>Rien à préparer — tout se mixe frais le matin en 2 min. C\'est le plus rapide.</div></div></div><div class="recipes">'+bcard('skyr',d.skyr)+bcard('oeufs',d.oeufs)+bcard('smoothie',d.smoothie)+'</div><div class="footer"><p><strong>🔄 Rotation : 1 semaine skyr · 1 semaine œufs · 1 semaine smoothie</strong></p><p>Chacun apporte ~40g de protéines — le chiffre à protéger, pas le volume.</p></div></div><script>window.print();<\/script></body></html>';
+  const w=window.open('','_blank');w.document.write(html);w.document.close();
+}
+
+function toggleRecipe(id){
+  const el=document.getElementById(id);const tog=document.getElementById('toggle-'+id);
+  if(!el)return;const open=el.style.display==='none';
+  el.style.display=open?'block':'none';if(tog)tog.textContent=open?'▾':'▸';
+}
+
+
 function saveTodayMacros(){
   const k=todayKey();
   ensureDay(k);
@@ -2185,9 +2528,198 @@ function saveTodayMacros(){
   toast('Macros enregistrées','olive','');
 }
 
+function updateRiceCalc(val){
+  const g=Math.max(0,parseInt(val)||0);
+  document.getElementById('riceGrams').value=g;
+  document.getElementById('riceSlider').value=Math.min(g,250);
+  document.getElementById('riceKcal').textContent=Math.round(g*3.5);
+  document.getElementById('riceCooked').textContent=Math.round(g*3);
+  document.getElementById('riceProt').textContent=Math.round(g*0.07*10)/10;
+  document.getElementById('riceCarbs').textContent=Math.round(g*0.72);
+  document.getElementById('riceFiber').textContent=Math.round(g*0.018*10)/10;
+}
+
 /* ============================================================
-   SOMMEIL PANEL
+   BILAN SANGUIN — NORMES PERSONNALISÉES
    ============================================================ */
+
+function saveBloodTest(){
+  const date=document.getElementById('bloodDate').value||todayKey();
+  const entry={
+    date,
+    cholTotal:parseFloat(document.getElementById('bCholTotal').value)||null,
+    hdl:parseFloat(document.getElementById('bHdl').value)||null,
+    ldl:parseFloat(document.getElementById('bLdl').value)||null,
+    trig:parseFloat(document.getElementById('bTrig').value)||null,
+    glycemia:parseFloat(document.getElementById('bGlycemia').value)||null,
+    vitD:parseFloat(document.getElementById('bVitD').value)||null,
+    b12:parseFloat(document.getElementById('bB12').value)||null,
+    fer:parseFloat(document.getElementById('bFer').value)||null,
+    ferritine:parseFloat(document.getElementById('bFerritine').value)||null,
+    mag:parseFloat(document.getElementById('bMag').value)||null,
+    tsh:parseFloat(document.getElementById('bTsh').value)||null,
+    crp:parseFloat(document.getElementById('bCrp').value)||null,
+    testo:parseFloat(document.getElementById('bTesto').value)||null,
+    notes:document.getElementById('bloodNotes').value||''
+  };
+  if(!DATA.bloodTests) DATA.bloodTests=[];
+  DATA.bloodTests=DATA.bloodTests.filter(b=>b.date!==date);
+  DATA.bloodTests.push(entry);
+  DATA.bloodTests.sort((a,b)=>b.date.localeCompare(a.date));
+  save();
+  renderBloodHistory();
+  renderBloodChart();
+  toast('Bilan enregistré','olive','');
+  // Reset form
+  ['bCholTotal','bHdl','bLdl','bTrig','bGlycemia','bVitD','bB12','bFer','bFerritine','bMag','bTsh','bCrp','bTesto','bloodNotes'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.value='';
+  });
+}
+
+/* ---- PROFIL UTILISATEUR ---- */
+function saveProfile(){
+  const sex=document.getElementById('profileSex')?.value||'';
+  const age=parseInt(document.getElementById('profileAge')?.value)||null;
+  const weight=parseFloat(document.getElementById('profileWeight')?.value)||null;
+  if(!DATA.profile)DATA.profile={};
+  DATA.profile={sex,age,weight};
+  save();
+  updateBloodHints();
+}
+function renderProfile(){
+  if(!DATA.profile)return;
+  const p=DATA.profile;
+  if(document.getElementById('profileSex'))document.getElementById('profileSex').value=p.sex||'';
+  if(document.getElementById('profileAge'))document.getElementById('profileAge').value=p.age||'';
+  if(document.getElementById('profileWeight'))document.getElementById('profileWeight').value=p.weight||'';
+  updateBloodHints();
+}
+function getBloodNorms(){
+  const p=DATA.profile||{};
+  const sex=p.sex||'M';
+  const age=p.age||25;
+  const isFemale=sex==='F';
+  const isOver50=age>=50;
+  return [
+    {key:'cholTotal',label:'Cholestérol total',unit:'g/L',norm:isOver50?'< 2.2':'< 2.0',good:(v)=>isOver50?v<2.2:v<2.0},
+    {key:'hdl',label:'HDL',unit:'g/L',norm:isFemale?'> 0.50':'> 0.40',good:(v)=>isFemale?v>0.50:v>0.40},
+    {key:'ldl',label:'LDL',unit:'g/L',norm:'< 1.60',good:(v)=>v<1.60},
+    {key:'trig',label:'Triglycérides',unit:'g/L',norm:'< 1.50',good:(v)=>v<1.50},
+    {key:'glycemia',label:'Glycémie',unit:'g/L',norm:'0.70–1.10',good:(v)=>v>=0.70&&v<=1.10},
+    {key:'vitD',label:'Vit. D',unit:'ng/mL',norm:'40–80',good:(v)=>v>=40&&v<=80},
+    {key:'b12',label:'Vit. B12',unit:'pg/mL',norm:'200–900',good:(v)=>v>=200&&v<=900},
+    {key:'fer',label:'Fer sérique',unit:'µg/dL',norm:isFemale?'60–170':'65–175',good:(v)=>isFemale?v>=60&&v<=170:v>=65&&v<=175},
+    {key:'ferritine',label:'Ferritine',unit:'ng/mL',norm:isFemale?'13–150':'30–400',good:(v)=>isFemale?v>=13&&v<=150:v>=30&&v<=400},
+    {key:'mag',label:'Magnésium',unit:'mmol/L',norm:'0.75–1.0',good:(v)=>v>=0.75&&v<=1.0},
+    {key:'tsh',label:'TSH',unit:'mUI/L',norm:isOver50?'0.40–6.0':'0.40–4.0',good:(v)=>isOver50?v>=0.40&&v<=6.0:v>=0.40&&v<=4.0},
+    {key:'crp',label:'CRP',unit:'mg/L',norm:'< 1.0',good:(v)=>v<1.0},
+    {key:'testo',label:'Testostérone',unit:'ng/dL',norm:isFemale?'15–70':isOver50?'200–900':'300–1000',good:(v)=>isFemale?v>=15&&v<=70:isOver50?v>=200&&v<=900:v>=300&&v<=1000},
+  ];
+}
+function updateBloodHints(){
+  const norms=getBloodNorms();
+  norms.forEach(n=>{
+    const el=document.getElementById('hint-'+n.key);
+    if(el)el.textContent='Norme : '+n.norm;
+  });
+}
+
+function renderBloodHistory(){
+  const host=document.getElementById('bloodHistoryList');
+  if(!host)return;
+  const tests=DATA.bloodTests||[];
+  if(!tests.length){
+    host.innerHTML='<p style="font-size:13px;color:var(--muted);font-style:italic;">Aucun bilan enregistré.</p>';
+    return;
+  }
+  host.innerHTML=tests.map((b,bi)=>
+    '<div class="blood-card">'+
+    '<div class="blood-card-head" onclick="toggleSection(\'blood'+bi+'\')">'+
+      '<div>'+
+        '<span class="blood-date">Bilan du '+frenchDate(dateFromKey(b.date))+'</span>'+
+        '<span class="blood-summary">'+getBloodNorms().filter(f=>b[f.key]!=null).length+' marqueurs renseignés</span>'+
+      '</div>'+
+      '<span class="recipe-toggle" id="toggle-blood'+bi+'">▸</span>'+
+    '</div>'+
+    '<div class="recipe-body" id="blood'+bi+'" style="display:none;">'+
+      '<div class="blood-grid">'+
+      getBloodNorms().filter(f=>b[f.key]!=null).map(f=>{
+        const val=b[f.key];
+        const ok=f.good(val);
+        return '<div class="blood-marker '+(ok?'ok':'warn')+'">'+
+          '<div class="bm-label">'+f.label+'</div>'+
+          '<div class="bm-val">'+val+' <span class="bm-unit">'+f.unit+'</span></div>'+
+          '<div class="bm-norm">'+(ok?'✓':'⚠')+' Norme : '+f.norm+'</div>'+
+          '</div>';
+      }).join('')+
+      '</div>'+
+      (b.notes?'<div class="recipe-tip">📝 '+b.notes+'</div>':'')+
+      '<button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="deleteBloodTest(\''+b.date+'\')">🗑 Supprimer</button>'+
+    '</div>'+
+    '</div>'
+  ).join('');
+}
+
+function deleteBloodTest(date){
+  if(!confirm('Supprimer ce bilan ?'))return;
+  DATA.bloodTests=(DATA.bloodTests||[]).filter(b=>b.date!==date);
+  save();
+  renderBloodHistory();
+  toast('Bilan supprimé','','');
+}
+
+let bloodChartInstance=null;
+function renderBloodChart(){
+  const tests=(DATA.bloodTests||[]).filter(b=>Object.keys(b).length>2).sort((a,b)=>a.date.localeCompare(b.date));
+  const section=document.getElementById('bloodChartSection');
+  if(!section)return;
+  if(tests.length<2){section.style.display='none';return;}
+  section.style.display='block';
+
+  const key=document.getElementById('bloodChartSelect')?.value||'vitD';
+  const field=getBloodNorms().find(f=>f.key===key);
+  const filtered=tests.filter(t=>t[key]!=null);
+  if(filtered.length<2){
+    document.getElementById('chartBlood').closest('.chart-canvas').innerHTML='<p style="font-size:13px;color:var(--muted);padding:20px 0;">Pas assez de données pour ce marqueur (minimum 2 bilans).</p>';
+    return;
+  }
+
+  const labels=filtered.map(t=>frenchDate(dateFromKey(t.date)));
+  const values=filtered.map(t=>t[key]);
+  const colors=values.map(v=>field.good(v)?'rgba(107,143,71,0.8)':'rgba(176,86,52,0.8)');
+
+  const ctx=document.getElementById('chartBlood');
+  if(!ctx)return;
+  if(bloodChartInstance){bloodChartInstance.destroy();bloodChartInstance=null;}
+  bloodChartInstance=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:field.label+' ('+field.unit+')',
+        data:values,
+        backgroundColor:colors,
+        borderColor:colors.map(c=>c.replace('0.8','1')),
+        borderWidth:1,
+        borderRadius:6
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.parsed.y} ${field.unit} (norme : ${field.norm})`}}
+      },
+      scales:{
+        y:{grid:{color:'rgba(0,0,0,.06)'},ticks:{font:{size:11}}},
+        x:{grid:{display:false},ticks:{font:{size:11}}}
+      }
+    }
+  });
+}
+
+
 function renderSleep(){
   const k=todayKey();
   ensureDay(k);
@@ -2293,7 +2825,10 @@ function toggleSuppl(id){
    SUIVI CORPOREL
    ============================================================ */
 function renderSuivi(){
-  /* historique */
+  renderBloodHistory();
+  renderProfile();
+  renderBloodChart();
+  /* historique poids */
   const host=document.getElementById('weighHistory');
   if(!DATA.weighIns.length){
     host.innerHTML='<div style="font-size:13.5px;color:var(--muted);font-style:italic;padding:8px 0;">Aucune pesée enregistrée.</div>';
@@ -2363,8 +2898,11 @@ function saveSettings(){
   DATA.settings.kcal=parseInt(document.getElementById('setKcal').value)||2600;
   DATA.settings.prot=parseInt(document.getElementById('setProt').value)||155;
   DATA.settings.sleep=parseFloat(document.getElementById('setSleep').value)||7.5;
+  DATA.settings.sex=document.getElementById('setSex').value||'M';
+  DATA.settings.age=parseInt(document.getElementById('setAge').value)||25;
   save();
   setGreetingName();
+  renderBloodHistory();
   toast('Réglages enregistrés','olive','');
 }
 
