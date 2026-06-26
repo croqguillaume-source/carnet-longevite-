@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carnet Longévité — Prends soin de toi. Sans que ça devienne un job.</title>
+  <meta name="description" content="Un carnet personnel pour construire ta routine santé — sport, nutrition, sommeil — et la tenir dans la durée.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --bg:        #FAFAF8;
+      --ink:       #141210;
+      --sage:      #2E5240;
+      --sage-mid:  #3D6B54;
+      --sage-pale: #E8F1EA;
+      --muted:     #7A7060;
+      --card:      #F0EDE5;
+      --border:    #DDD8CE;
+      --white:     #FFFFFF;
+
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body:    'Hanken Grotesk', system-ui, sans-serif;
+
+      --max-w:  1100px;
+      --px:     2rem;
+    }
+
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; }
+
+    /* ===== LAYOUT ===== */
+    .wrap {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--px);
+    }
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+
+    /* ===== NAV ===== */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250,250,248,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 1.1rem;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .nav-logo span { color: var(--sage); }
+    .btn-nav {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--sage);
+      background: transparent;
+      border: 1.5px solid var(--sage);
+      border-radius: 4px;
+      padding: 0.45rem 1rem;
+      cursor: pointer;
+      transition: background 0.14s, color 0.14s;
+    }
+    .btn-nav:hover { background: var(--sage); color: var(--white); }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 6rem 0 4rem;
+    }
+    .hero .wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero-eyebrow { margin-bottom: 1.25rem; }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 4.5vw, 4.25rem);
+      font-weight: 500;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--sage);
+    }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 40ch;
+      margin-bottom: 2.25rem;
+      line-height: 1.65;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      background: var(--sage);
+      border: none;
+      border-radius: 4px;
+      padding: 0.85rem 1.75rem;
+      cursor: pointer;
+      transition: opacity 0.14s, transform 0.14s;
+    }
+    .btn-primary:hover { opacity: 0.86; transform: translateY(-1px); }
+
+    /* App mockup */
+    .hero-mockup {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      user-select: none;
+    }
+    .mock-chrome {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 1rem;
+    }
+    .mock-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .mock-dot:nth-child(1) { background: #EC6A5E; }
+    .mock-dot:nth-child(2) { background: #F4BF4F; }
+    .mock-dot:nth-child(3) { background: #61C554; }
+    .mock-url {
+      flex: 1;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 10.5px;
+      color: var(--muted);
+    }
+    .mock-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .mock-tab {
+      font-size: 10px;
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--white);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .mock-tab.active {
+      background: var(--sage);
+      color: var(--white);
+      border-color: var(--sage);
+    }
+    .mock-kpis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    .mock-kpi {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .mock-kpi-val {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .mock-kpi-label {
+      font-size: 9.5px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .mock-bars { display: flex; flex-direction: column; gap: 9px; }
+    .mock-bar-row { display: flex; align-items: center; gap: 10px; }
+    .mock-bar-label { font-size: 9.5px; color: var(--muted); width: 65px; flex-shrink: 0; }
+    .mock-bar-track {
+      flex: 1; height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .mock-bar-fill {
+      height: 100%;
+      background: var(--sage);
+      border-radius: 3px;
+      transition: width 1.2s ease;
+    }
+
+    /* ===== PROBLEM ===== */
+    .problem {
+      padding: 4rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .problem .wrap {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .problem-title {
+      font-family: var(--font-display);
+      font-size: 1.9rem;
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin: 0.75rem 0 1.25rem;
+    }
+    .problem-body {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 56ch;
+    }
+    .problem-body strong { color: var(--ink); font-weight: 500; }
+
+    /* ===== FEATURES ===== */
+    .features {
+      padding: 4rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .features-header { margin-bottom: 2rem; }
+    .features-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3vw, 2.75rem);
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-top: 0.6rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .feat {
+      padding: 1.5rem 1.1rem;
+      border-right: 1px solid var(--border);
+      border-top: 3px solid var(--sage);
+    }
+    .feat:last-child { border-right: none; }
+    .feat-icon { font-size: 1.5rem; display: block; margin-bottom: 0.6rem; }
+    .feat-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .feat-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.55; }
+
+    /* ===== PHILOSOPHY ===== */
+    .philosophy {
+      padding: 4.5rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .philosophy .wrap {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+    }
+    .philo-number {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 9vw, 7.5rem);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--sage);
+      flex-shrink: 0;
+    }
+    .philo-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: -0.015em;
+      max-width: 42ch;
+    }
+    .philo-text strong { font-weight: 600; }
+    .philo-sub {
+      margin-top: 0.75rem;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    /* ===== FORM SECTION ===== */
+    .form-section {
+      background: var(--ink);
+      color: var(--white);
+      padding: 6rem 0;
+    }
+    .form-section .wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4.5rem;
+      align-items: start;
+    }
+    .form-eyebrow { color: #7EC89A; }
+    .form-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 3.5vw, 3.25rem);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin: 0.75rem 0 1.25rem;
+    }
+    .form-desc {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+    }
+    .form-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 2rem;
+    }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 0.4rem;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.14);
+      border-radius: 4px;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.14s;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.28); }
+    .form-input:focus { border-color: rgba(255,255,255,0.42); }
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem;
+      margin-top: 0.25rem;
+      background: var(--sage-mid);
+      color: var(--white);
+      border: none;
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.14s;
+    }
+    .btn-submit:hover { opacity: 0.86; }
+    .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+    .form-fine {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+    }
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem 0;
+    }
+    .form-success-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .form-success-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .form-success-body { color: rgba(255,255,255,0.55); font-size: 0.95rem; }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+    .footer-copy { font-size: 0.75rem; color: var(--muted); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      :root { --px: 1.5rem; }
+      .hero .wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-mockup { display: none; }
+      .hero { padding: 4rem 0 3rem; }
+      .problem .wrap { grid-template-columns: 1fr; gap: 1rem; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .feat { border-right: none; border-bottom: 1px solid var(--border); }
+      .feat:nth-child(odd) { border-right: 1px solid var(--border); }
+      .feat:last-child { border-bottom: none; }
+      .philosophy .wrap { flex-direction: column; gap: 1.5rem; }
+      .form-section .wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+      .footer .wrap { flex-direction: column; gap: 0.4rem; text-align: center; }
+    }
+
+    @media (max-width: 500px) {
+      :root { --px: 1.25rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .feat { border-right: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="wrap">
+    <span class="nav-logo">Carnet <span>Longévité</span></span>
+    <a href="#acces" class="btn-nav">Demander un accès →</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow hero-eyebrow">Pour les 25–35 ans qui veulent durer</p>
+      <h1 class="hero-title">
+        Prends soin de toi.<br>
+        Sans que ça devienne<br>
+        <em>un job.</em>
+      </h1>
+      <p class="hero-sub">Un carnet personnel pour construire ta routine santé — sport, nutrition, sommeil — et la tenir dans la durée.</p>
+      <a href="#acces" class="btn-primary">Demander un accès ↓</a>
+    </div>
+    <!-- Mini app mockup -->
+    <div class="hero-mockup" aria-hidden="true">
+      <div class="mock-chrome">
+        <div class="mock-dot"></div>
+        <div class="mock-dot"></div>
+        <div class="mock-dot"></div>
+        <div class="mock-url">carnetlongevite.app</div>
+      </div>
+      <div class="mock-tabs">
+        <div class="mock-tab active">Dashboard</div>
+        <div class="mock-tab">Sport</div>
+        <div class="mock-tab">Nutrition</div>
+        <div class="mock-tab">Sommeil</div>
+        <div class="mock-tab">Compléments</div>
+      </div>
+      <div class="mock-kpis">
+        <div class="mock-kpi">
+          <div class="mock-kpi-val">86%</div>
+          <div class="mock-kpi-label">Adhérence 7j</div>
+        </div>
+        <div class="mock-kpi">
+          <div class="mock-kpi-val">7h42</div>
+          <div class="mock-kpi-label">Sommeil moy.</div>
+        </div>
+        <div class="mock-kpi">
+          <div class="mock-kpi-val">14j</div>
+          <div class="mock-kpi-label">Streak</div>
+        </div>
+      </div>
+      <div class="mock-bars">
+        <div class="mock-bar-row">
+          <span class="mock-bar-label">Sport</span>
+          <div class="mock-bar-track"><div class="mock-bar-fill" style="width:90%"></div></div>
+        </div>
+        <div class="mock-bar-row">
+          <span class="mock-bar-label">Nutrition</span>
+          <div class="mock-bar-track"><div class="mock-bar-fill" style="width:78%"></div></div>
+        </div>
+        <div class="mock-bar-row">
+          <span class="mock-bar-label">Sommeil</span>
+          <div class="mock-bar-track"><div class="mock-bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="mock-bar-row">
+          <span class="mock-bar-label">Compléments</span>
+          <div class="mock-bar-track"><div class="mock-bar-fill" style="width:95%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROBLEM ===== -->
+<section class="problem">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Le problème</span>
+    </div>
+    <div>
+      <h2 class="problem-title">L'information ne manque pas.<br>Le système, si.</h2>
+      <p class="problem-body">
+        Les podcasts, les livres, les threads — tu sais déjà <strong>quoi faire</strong>. 
+        Dormir 7h30, manger assez de protéines, t'entraîner régulièrement. 
+        Ce qui manque, c'est un endroit où <strong>tout ça tient ensemble</strong> — 
+        simple, personnel, qui survit au premier mois.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features">
+  <div class="wrap">
+    <div class="features-header">
+      <span class="eyebrow">Ce que tu trouveras dedans</span>
+      <h2 class="features-title">5 modules.<br>Une routine complète.</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat">
+        <span class="feat-icon">🏋️</span>
+        <div class="feat-name">Sport</div>
+        <p class="feat-desc">Programme PPL×2 intégré. Logger de séance, suivi de progression, historique par exercice.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">🍳</span>
+        <div class="feat-name">Nutrition</div>
+        <p class="feat-desc">Batch cooking avec recettes détaillées, macros calculées et fiches PDF téléchargeables.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">😴</span>
+        <div class="feat-name">Sommeil</div>
+        <p class="feat-desc">Log coucher/lever et qualité. Calcul automatique de la durée. Objectif 7h30.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">☀️</span>
+        <div class="feat-name">Routine</div>
+        <p class="feat-desc">Checklist quotidienne personnalisable. Routine matin et soir adaptée à ton emploi du temps.</p>
+      </div>
+      <div class="feat">
+        <span class="feat-icon">💊</span>
+        <div class="feat-name">Compléments</div>
+        <p class="feat-desc">Stack minimal : créatine, D3+K2, oméga-3, magnésium. Log quotidien intégré.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PHILOSOPHY ===== -->
+<section class="philosophy">
+  <div class="wrap">
+    <div class="philo-number">90%</div>
+    <div>
+      <p class="philo-text">des bénéfices santé avec <strong>10% de l'effort obsessionnel</strong> — c'est la philosophie derrière Carnet Longévité.</p>
+      <p class="philo-sub">Inspiré du protocole SSN de Charles Human Lab. Conçu pour durer, pas pour impressionner.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORM SECTION ===== -->
+<section class="form-section" id="acces">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow form-eyebrow">Accès sur invitation</span>
+      <h2 class="form-title">Demande<br>un accès.</h2>
+      <p class="form-desc">
+        Les demandes sont examinées manuellement. 
+        J'envoie les accès par vagues de 10 à 20 personnes — 
+        tu recevras un email dès que le tien est prêt.
+      </p>
+    </div>
+    <div class="form-card">
+      <div id="form-container">
+        <div class="form-group">
+          <label class="form-label" for="prenom">Prénom</label>
+          <input class="form-input" type="text" id="prenom" placeholder="Alexandre" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" type="email" id="email" placeholder="alex@gmail.com" autocomplete="email">
+        </div>
+        <button class="btn-submit" id="submit-btn" onclick="handleSubmit()">Demander un accès →</button>
+        <p class="form-fine">Pas de spam. Un email quand ton accès est prêt — c'est tout.</p>
+      </div>
+      <div class="form-success" id="form-success">
+        <div class="form-success-icon">✅</div>
+        <div class="form-success-title">Demande reçue.</div>
+        <p class="form-success-body">Je reviendrai vers toi dès que ton accès est prêt. En général sous 48h.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="wrap">
+    <span class="footer-logo">Carnet Longévité</span>
+    <span class="footer-copy">Fait à Paris · 2026</span>
+  </div>
+</footer>
+
+<script>
+  // ─────────────────────────────────────────────────────────────
+  // ⚠️  CONFIGURATION — remplace les deux valeurs ci-dessous
+  // ─────────────────────────────────────────────────────────────
+  var SUPABASE_URL      = 'https://csotvmnwpvezgakbhvbr.supabase.co';
+  var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNzb3R2bW53cHZlemdha2JodmJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MDkxMDEsImV4cCI6MjA5NzE4NTEwMX0._Eh1APdr2a-4YO3P0vy-KwcN1yj_YnoOf1ChJQMgUDY';
+  // ─────────────────────────────────────────────────────────────
+
+  function handleSubmit() {
+    var prenom = document.getElementById('prenom').value.trim();
+    var email  = document.getElementById('email').value.trim();
+    var btn    = document.getElementById('submit-btn');
+
+    if (!prenom || !email) {
+      alert('Merci de remplir tous les champs.');
+      return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      alert('Adresse email invalide.');
+      return;
+    }
+
+    btn.disabled    = true;
+    btn.textContent = 'Envoi en cours…';
+
+    fetch(SUPABASE_URL + '/rest/v1/waitlist', {
+      method: 'POST',
+      headers: {
+        'apikey':        SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        'Content-Type':  'application/json',
+        'Prefer':        'return=minimal'
+      },
+      body: JSON.stringify({ prenom: prenom, email: email })
+    })
+    .then(function(res) {
+      if (res.ok || res.status === 201) {
+        document.getElementById('form-container').style.display = 'none';
+        document.getElementById('form-success').style.display   = 'block';
+      } else {
+        throw new Error('Erreur ' + res.status);
+      }
+    })
+    .catch(function(err) {
+      console.error(err);
+      btn.disabled    = false;
+      btn.textContent = 'Demander un accès →';
+      alert('Une erreur est survenue. Réessaie dans quelques instants.');
+    });
+  }
+
+  // Entrée clavier → focus suivant ou submit
+  document.getElementById('prenom').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('email').focus();
+  });
+  document.getElementById('email').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleSubmit();
+  });
+</script>
+
+</body>
+</html>
