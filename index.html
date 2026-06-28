@@ -1109,15 +1109,25 @@ async function authSignUp(){
   if(!email||!pwd){errEl.textContent='Email et mot de passe requis.';return;}
   if(pwd.length<6){errEl.textContent='Mot de passe minimum 6 caractères.';return;}
   const btn=document.getElementById('authSubmitBtn');
-  btn.textContent='Création…';btn.disabled=true;
+  btn.textContent='Vérification…';btn.disabled=true;
   try{
+    // Vérifier l'invitation
+    const {data:wl}=await sb.from('waitlist').select('access_sent_at').eq('email',email).maybeSingle();
+    if(!wl){
+      errEl.textContent="Cette adresse n'a pas encore reçu d'invitation. Rejoins la liste d'attente sur carnetlongevite.fr";
+      btn.textContent='Créer mon compte';btn.disabled=false;return;
+    }
+    if(!wl.access_sent_at){
+      errEl.textContent="Tu es sur la liste, ton invitation arrive bientôt !";
+      btn.textContent='Créer mon compte';btn.disabled=false;return;
+    }
+    // Inscription
+    btn.textContent='Création…';
     const {data,error}=await sb.auth.signUp({email,password:pwd});
     if(error)throw error;
-    // Création réussie, créer la ligne user_data
     if(data?.user?.id){
-      try{
-        await sb.from('user_data').insert({user_id:data.user.id,data:{}});
-      }catch(e){console.warn('user_data insert failed, will retry later',e);}
+      try{await sb.from('user_data').insert({user_id:data.user.id,data:{}});}
+      catch(e){console.warn('user_data insert failed',e);}
     }
     okEl.textContent='✓ Compte créé et connecté !';
     setTimeout(()=>closeModal('modalAuth'),1000);
