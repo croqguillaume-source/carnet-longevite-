@@ -1480,6 +1480,14 @@ const PROGRAMS={
     {name:'Leg curl',sets:3,range:'12-15'},
     {name:'Gainage',sets:3,range:'20-40s'}
   ]},
+  fullbody_pdc:{name:'Full body (poids du corps)',exercises:[
+    {name:'Squats au poids du corps',sets:4,range:'15-25'},
+    {name:'Pompes',sets:4,range:'8-20'},
+    {name:'Tractions ou rowing australien',sets:4,range:'6-12'},
+    {name:'Fentes marchées',sets:3,range:'10-15/jambe'},
+    {name:'Dips sur banc / chaise',sets:3,range:'10-15'},
+    {name:'Gainage',sets:3,range:'30-60s'}
+  ]},
   course:{name:'Course Zone 2',exercises:[
     {name:'Course Zone 2',sets:1,range:'12 km',key:'course'}
   ]}
@@ -1499,6 +1507,7 @@ const SESSION_META={
   lower:{cat:'muscu',label:'Lower',color:'#7C8A5C'},
   fullbody:{cat:'muscu',label:'Full body',color:'#3C4A28'},
   fullbody_deb:{cat:'muscu',label:'Full body',color:'#3C4A28'},
+  fullbody_pdc:{cat:'muscu',label:'Full body PDC',color:'#3C4A28'},
   custom:{cat:'muscu',label:'Perso',color:'#6B6A53'},
   course:{cat:'cardio',label:'Zone 2',color:'#B05634',subtype:'zone2'},
   zone2:{cat:'cardio',label:'Zone 2',color:'#B05634',subtype:'zone2'},
@@ -2425,6 +2434,7 @@ const PROG_GROUPS=[
     {value:'push_b',label:'Push B'},{value:'pull_b',label:'Pull B'},
     {value:'upper',label:'Upper (haut)'},{value:'lower',label:'Lower (bas)'},
     {value:'fullbody',label:'Full body'},{value:'fullbody_deb',label:'Full body débutant'},
+    {value:'fullbody_pdc',label:'Full body (poids du corps)'},
     {value:'custom',label:'Séance perso'}
   ]},
   {group:'Cardio',options:[
@@ -2965,6 +2975,37 @@ function saveQuestionnaire(){
 }
 
 /* Générateur : construit un tableau [lun..dim] de 7 types selon le profil */
+/* Splits muscu équilibrés selon le nombre de séances.
+   Salle = PPL complet ; Maison = full body / upper-lower (pas de PPL machines). */
+const MUSCU_SALLE={
+  1:['fullbody'],
+  2:['upper','lower'],
+  3:['push_a','pull_a','legs'],
+  4:['upper','lower','upper','lower'],
+  5:['push_a','pull_a','legs','upper','lower'],
+  6:['push_a','pull_a','legs','push_b','pull_b','legs']  /* PPL×2 : 2 push / 2 pull / 2 jambes */
+};
+const MUSCU_MAISON={
+  1:['fullbody'],
+  2:['upper','lower'],
+  3:['fullbody','upper','lower'],
+  4:['upper','lower','upper','lower'],
+  5:['upper','lower','upper','lower','fullbody'],
+  6:['upper','lower','upper','lower','upper','lower']
+};
+function muscuSplitFor(count,niveau,materiel){
+  if(count<=0)return [];
+  if(materiel==='pdc')return Array.from({length:count},()=>'fullbody_pdc');
+  if(niveau==='debutant'){
+    if(count<=3)return Array.from({length:count},()=>'fullbody_deb');
+    return Array.from({length:count},(_,i)=>['upper','lower'][i%2]);
+  }
+  const table=(materiel==='maison')?MUSCU_MAISON:MUSCU_SALLE;
+  if(table[count])return [...table[count]];
+  const base=table[6];
+  return Array.from({length:count},(_,i)=>base[i%base.length]);
+}
+
 function generateProgram(p){
   const prog=['repos','repos','repos','repos','repos','repos','repos'];
   const n=p.seances||4;
@@ -2972,44 +3013,48 @@ function generateProgram(p){
   const wantMuscu=pri.includes('muscu');
   const wantCardio=pri.includes('cardio');
   const wantMob=pri.includes('mobilite');
-  const deb=(p.niveau==='debutant');
-  const pdc=(p.materiel==='pdc');
+  const obj=p.objectif;
+
+  /* Mobilité : si priorisée (≥3 séances), OU si objectif santé/remise (≥4 séances) */
+  let mobCount=0;
+  if(wantMob&&n>=3)mobCount=1;
+  else if((obj==='sante'||obj==='remise')&&n>=4)mobCount=1;
+  const trainDays=n-mobCount;
 
   /* Répartition muscu vs cardio selon priorités & objectif */
-  let muscuCount,cardioCount,mobCount=0;
-  if(wantMob&&n>=4)mobCount=1;
-  const trainDays=n-mobCount;
+  let muscuCount=0,cardioCount=0;
   if(wantMuscu&&wantCardio){
-    if(p.objectif==='cardio'){cardioCount=Math.ceil(trainDays*0.6);muscuCount=trainDays-cardioCount;}
-    else if(p.objectif==='muscle'){muscuCount=Math.ceil(trainDays*0.75);cardioCount=trainDays-muscuCount;}
-    else{muscuCount=Math.ceil(trainDays*0.6);cardioCount=trainDays-muscuCount;}
-  }else if(wantMuscu){muscuCount=trainDays;cardioCount=0;}
-  else if(wantCardio){cardioCount=trainDays;muscuCount=0;}
-  else{muscuCount=trainDays;cardioCount=0;}
+    let cardioRatio;
+    if(obj==='cardio')cardioRatio=0.6;
+    else if(obj==='fatloss')cardioRatio=0.5;
+    else if(obj==='muscle')cardioRatio=0.25;
+    else if(obj==='sante'||obj==='remise')cardioRatio=0.5;
+    else cardioRatio=0.4; /* recomp */
+    cardioCount=Math.round(trainDays*cardioRatio);
+    /* garde au moins 1 de chaque quand les deux sont voulus */
+    cardioCount=Math.max(1,Math.min(trainDays-1,cardioCount));
+    muscuCount=trainDays-cardioCount;
+  }else if(wantMuscu){muscuCount=trainDays;}
+  else if(wantCardio){cardioCount=trainDays;}
+  else{muscuCount=trainDays;} /* fallback : ni l'un ni l'autre coché */
 
-  /* Choix des séances muscu selon volume (garantit exactement muscuCount séances) */
-  let muscuSplit=[];
-  if(muscuCount>0){
-    let base;
-    if(deb)base=['fullbody_deb'];
-    else if(muscuCount>=5)base=['push_a','pull_a','legs','push_b','pull_b'];
-    else if(muscuCount===4)base=['upper','lower','upper','lower'];
-    else if(muscuCount===3)base=['push_a','pull_a','legs'];
-    else if(muscuCount===2)base=['upper','lower'];
-    else base=['fullbody'];
-    for(let i=0;i<muscuCount;i++)muscuSplit.push(base[i%base.length]);
-  }
+  /* Séances muscu — splits équilibrés, sensibles au niveau et au matériel */
+  const muscuSplit=muscuSplitFor(muscuCount,p.niveau,p.materiel);
 
-  /* Choix cardio : Zone 2 + fractionné si perf visée */
-  let cardioSplit=[];
+  /* Séances cardio — Zone 2 par défaut, fractionnés si perf/perte de gras visée */
+  const cardioSplit=[];
   for(let i=0;i<cardioCount;i++){
-    if((p.objectif==='cardio'||p.objectif==='fatloss')&&i===cardioCount-1&&cardioCount>1)cardioSplit.push('fractionne');
-    else cardioSplit.push('zone2');
+    let frac=false;
+    if((obj==='cardio'||obj==='fatloss')&&cardioCount>1){
+      /* 1 fractionné à 2 séances cardio, 2 fractionnés à partir de 4 */
+      if(i===cardioCount-1)frac=true;
+      else if(cardioCount>=4&&i===0)frac=true;
+    }
+    cardioSplit.push(frac?'fractionne':'zone2');
   }
 
-  /* Assemble une liste de séances puis répartit sur la semaine en espaçant */
-  let sessions=[];
-  /* alterne muscu/cardio pour éviter d'enchaîner le même type */
+  /* Assemble en alternant muscu/cardio pour ne pas enchaîner le même type */
+  const sessions=[];
   const mm=[...muscuSplit],cc=[...cardioSplit];
   while(mm.length||cc.length){
     if(mm.length)sessions.push(mm.shift());
@@ -3017,9 +3062,9 @@ function generateProgram(p){
   }
   if(mobCount)sessions.push('mobilite');
 
-  /* Place les séances sur des jours espacés (lun,mar,mer,jeu,ven,sam,dim order but skip to spread) */
+  /* Place les séances sur des jours espacés dans la semaine */
   const dayOrder=spreadDays(sessions.length);
-  sessions.forEach((s,i)=>{prog[dayOrder[i]]=s;});
+  sessions.forEach((s,i)=>{if(dayOrder[i]!==undefined)prog[dayOrder[i]]=s;});
   return prog;
 }
 /* Renvoie des indices de jours (0=lun..6=dim) espacés pour n séances */
