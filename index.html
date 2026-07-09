@@ -33,7 +33,8 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
-  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+  html{overflow-x:hidden;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
   body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");opacity:.05;mix-blend-mode:multiply;}
   .wrap{max-width:920px;margin:0 auto;padding:0 16px;position:relative;z-index:1;}
@@ -100,10 +101,10 @@
   /* CALENDAR */
   .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
   .cal-month-label{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-.01em;}
-  .cal-grid-head{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:4px;}
-  .cal-grid-head span{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:4px 0;}
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
-  .cal-day{aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:600;cursor:default;transition:.15s;position:relative;padding:2px;}
+  .cal-grid-head{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;margin-bottom:4px;width:100%;}
+  .cal-grid-head span{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:4px 0;min-width:0;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;width:100%;}
+  .cal-day{aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:600;cursor:default;transition:.15s;position:relative;padding:2px;min-width:0;min-height:0;}
   .cal-day.other-month{opacity:.28;}
   .cal-day.today{background:var(--olive);color:var(--paper);font-weight:700;}
   .cal-day.today .cal-session-tag{background:rgba(255,255,255,.2);color:var(--paper);}
@@ -124,10 +125,13 @@
   .cl-rest{background:var(--line);}
 
   /* PROGRAM CUSTOMIZER */
-  .prog-day-row{display:grid;grid-template-columns:80px 1fr;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--paper-deep);}
+  .prog-day-row{display:grid;grid-template-columns:80px 1fr 104px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--paper-deep);}
+  @media(max-width:480px){.prog-day-row{grid-template-columns:58px 1fr 92px;gap:6px;}}
   .prog-day-row:last-child{border-bottom:none;}
   .prog-day-name{font-weight:700;font-size:13.5px;}
-  .prog-day-select{width:100%;}
+  .prog-day-select{width:100%;min-width:0;}
+  .prog-day-time{min-width:0;}
+  .prog-day-time:disabled{opacity:.4;}
 
   /* EXERCISE SWAP */
   .btn-swap{background:var(--paper-deep);border:1px solid var(--line);border-radius:6px;padding:3px 9px;font-size:11.5px;font-weight:700;color:var(--clay-deep);cursor:pointer;margin-left:auto;white-space:nowrap;transition:.15s;}
@@ -513,6 +517,9 @@
   <h2>Ton <em>tableau de bord</em></h2>
   <p class="lead">Tes chiffres clés, ta semaine, et où tu fuites. Mis à jour à chaque coche.</p>
 
+  <!-- Accueil premier lancement (masqué dès la première coche ou séance) -->
+  <div id="welcomeCard" style="display:none;"></div>
+
   <!-- KPI grid -->
   <div class="grid g4 mb18" id="kpiGrid"></div>
 
@@ -533,12 +540,12 @@
     <div class="chart-box">
       <div class="chart-title">Adhérence — 30 derniers jours</div>
       <div class="chart-sub">% de checklist complétée par jour</div>
-      <div class="chart-canvas"><canvas id="chartAdherence"></canvas></div>
+      <div class="chart-canvas" data-canvas="chartAdherence"><canvas id="chartAdherence"></canvas></div>
     </div>
     <div class="chart-box">
       <div class="chart-title">Sommeil — 30 derniers jours</div>
       <div class="chart-sub">Heures dormies par nuit</div>
-      <div class="chart-canvas"><canvas id="chartSleep"></canvas></div>
+      <div class="chart-canvas" data-canvas="chartSleep"><canvas id="chartSleep"></canvas></div>
     </div>
   </div>
 
@@ -546,7 +553,7 @@
   <div class="chart-box mb18">
     <div class="chart-title">Progression musculaire</div>
     <div class="chart-sub">Poids levé sur les exercices clés (meilleur set du jour)</div>
-    <div class="chart-canvas tall"><canvas id="chartLifts"></canvas></div>
+    <div class="chart-canvas tall" data-canvas="chartLifts"><canvas id="chartLifts"></canvas></div>
   </div>
 
   <!-- Leaks -->
@@ -599,7 +606,7 @@
   <!-- Personnalisation du programme -->
   <div class="card" id="programCustomCard">
     <h3>Mon programme de la semaine</h3>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Assigne librement un type de séance à chaque jour — muscu, cardio, mobilité ou repos.</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Assigne librement un type de séance à chaque jour — muscu, cardio, mobilité ou repos — et l'heure à laquelle tu t'entraînes. Ta routine et tes rappels se calent dessus. Sans heure : 18h en semaine, 9h le week-end.</p>
     <div id="programCustomGrid"></div>
     <button class="btn btn-olive btn-sm" style="margin-top:14px;" onclick="saveUserProgram()">Enregistrer le programme</button>
   </div>
@@ -620,7 +627,8 @@
       <label class="fld"><span class="lbl">Verres d'eau</span><input type="number" class="fi" id="todayWater" placeholder="8"/></label>
     </div>
     <button class="btn btn-olive btn-sm" onclick="saveTodayMacros()">Enregistrer</button>
-    <div class="help">Cibles : ~2600 kcal · ~150-160 g protéines · ~10 verres d'eau.</div>
+    <div class="help" id="macroStatus" style="display:none;font-weight:600;color:var(--olive);"></div>
+    <div class="help" id="macroTargets">Cibles : ~2600 kcal · ~155 g protéines · ~8-10 verres d'eau.</div>
   </div>
 
   <!-- ===== BATCH COOKING ===== -->
@@ -859,7 +867,7 @@
   <div class="chart-box mb18">
     <div class="chart-title">Évolution du poids</div>
     <div class="chart-sub">Toutes les pesées enregistrées</div>
-    <div class="chart-canvas tall"><canvas id="chartWeight"></canvas></div>
+    <div class="chart-canvas tall" data-canvas="chartWeight"><canvas id="chartWeight"></canvas></div>
   </div>
 
   <!-- Historique -->
@@ -900,9 +908,8 @@
 
   <div class="card mb18">
     <h3>Nouveau bilan</h3>
-    <div class="help" style="margin-bottom:14px;">Les normes affichées sont personnalisées selon ton sexe et ton âge (réglages en bas de page).</div>
-      <input type="date" class="fi" id="bloodDate"/>
-    </label>
+    <div class="help" style="margin-bottom:14px;">Les normes affichées sont personnalisées selon ton sexe et ton âge (carte « Ton profil » juste au-dessus).</div>
+    <label class="fld"><span class="lbl">Date du bilan</span><input type="date" class="fi" id="bloodDate"/></label>
     <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 8px;">Lipides</div>
     <div class="grid g3">
       <label class="fld"><span class="lbl">Cholestérol total (g/L)</span><input type="number" class="fi" id="bCholTotal" step="0.01" placeholder="1.80"/><span class="fi-hint" id="hint-cholTotal">Norme : &lt; 2.0</span></label>
@@ -942,6 +949,28 @@
     <div id="bloodHistoryList"><p style="font-size:13px;color:var(--muted);font-style:italic;">Aucun bilan enregistré.</p></div>
   </div>
 
+  <!-- Graphique évolution marqueur (visible dès 2 bilans) -->
+  <div class="chart-box mb18" id="bloodChartSection" style="display:none;">
+    <div class="chart-title">Évolution d'un marqueur</div>
+    <div class="chart-sub">Suis un marqueur d'un bilan à l'autre — vert dans la norme, orange hors norme.</div>
+    <select class="fi" id="bloodChartSelect" onchange="renderBloodChart()" style="margin-bottom:10px;max-width:280px;">
+      <option value="cholTotal">Cholestérol total</option>
+      <option value="hdl">HDL</option>
+      <option value="ldl">LDL</option>
+      <option value="trig">Triglycérides</option>
+      <option value="glycemia">Glycémie</option>
+      <option value="vitD" selected>Vitamine D</option>
+      <option value="b12">Vitamine B12</option>
+      <option value="fer">Fer sérique</option>
+      <option value="ferritine">Ferritine</option>
+      <option value="mag">Magnésium</option>
+      <option value="tsh">TSH</option>
+      <option value="crp">CRP</option>
+      <option value="testo">Testostérone</option>
+    </select>
+    <div class="chart-canvas"><canvas id="chartBlood"></canvas></div>
+  </div>
+
   <!-- Réglages -->
   <hr class="sep" />
   <h3>Réglages & données</h3>
@@ -955,21 +984,7 @@
       <label class="fld"><span class="lbl">Cible protéines (g)</span><input type="number" class="fi" id="setProt" placeholder="155" /></label>
       <label class="fld"><span class="lbl">Cible sommeil (h)</span><input type="number" class="fi" id="setSleep" step="0.25" placeholder="7.5" /></label>
     </div>
-    <div class="grid g2" style="margin-top:10px;">
-      <label class="fld">
-        <span class="lbl">Sexe biologique</span>
-        <select class="fi" id="setSex">
-          <option value="M">Homme</option>
-          <option value="F">Femme</option>
-        </select>
-        <span class="fi-hint">Utilisé pour personnaliser les normes de prise de sang.</span>
-      </label>
-      <label class="fld">
-        <span class="lbl">Âge</span>
-        <input type="number" class="fi" id="setAge" placeholder="25" min="16" max="100"/>
-        <span class="fi-hint">Utilisé pour adapter certaines normes (LDL, TSH).</span>
-      </label>
-    </div>
+    <div class="help" style="margin-bottom:10px;">Sexe et âge se règlent dans la carte « Ton profil » plus haut — c'est elle qui personnalise les normes de prise de sang.</div>
     <button class="btn btn-olive btn-sm" onclick="saveSettings()">Enregistrer les réglages</button>
     <hr class="sep" />
     <div style="font-size:13px;color:var(--muted);margin-bottom:9px;">
@@ -1101,6 +1116,23 @@
   </div>
 </div>
 
+<!-- MODAL : CONFIRMATION (remplace les confirm() natifs) -->
+<div class="modal-bg" id="modalConfirm">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-head">
+      <h3 id="confirmTitle">Confirmer</h3>
+      <button class="modal-close" onclick="closeConfirm(false)">×</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmMsg" style="font-size:14px;color:var(--ink-soft);"></p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeConfirm(false)">Annuler</button>
+      <button class="btn btn-primary" id="confirmBtn" style="flex:1;" onclick="closeConfirm(true)">Confirmer</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    STORAGE
@@ -1109,14 +1141,16 @@ const KEY='carnet_longevite_v1';
 let DATA={
   version:1,
   name:'',
-  settings:{kcal:2600,prot:155,sleep:7.5,sex:'M',age:25},
+  settings:{kcal:2600,prot:155,sleep:7.5},
   // userProgram: array of 7 items [lun..dim], each = session type key or 'repos'
   userProgram:['course','push_a','pull_a','legs','repos','push_b','pull_b'],
+  // programTimes: heure de séance choisie par jour ('HH:MM' ou null → défaut 18h semaine / 9h week-end)
+  programTimes:[null,null,null,null,null,null,null],
   // sportProfile: réponses du questionnaire → programme adapté
   sportProfile:{configured:false,objectif:null,seances:null,priorites:[],niveau:null,materiel:null},
   // customPrograms: séances muscu "perso" définies par l'utilisateur (clé -> {name,exercises})
   customPrograms:{},
-  profile:{sexe:'M',age:null},
+  profile:{sex:'',age:null,weight:null},
   days:{},
   sessions:[],
   weighIns:[],
@@ -1332,8 +1366,27 @@ function frenchDate(d){
 /* ============================================================
    ROUTINE — par jour de semaine
    ============================================================ */
-const FOCUS=['Cardio Zone 2 · 12 km','Push A · 18h','Pull A · 18h','Jambes + Abdos · 18h','Repos actif','Push B · 9h','Pull B · 9h'];
-const FOCUS_SHORT=['Course Z2','Push A','Pull A','Jambes','Repos','Push B','Pull B'];
+/* La séance du jour vient du programme utilisateur (DATA.userProgram),
+   plus d'un planning fixe. Heure indicative : 18h en semaine, 9h le week-end. */
+function sessionForDay(dow){
+  const type=getUserProg()[dow]||'repos';
+  const meta=metaFor(type);
+  if(meta.cat==='repos')return {type,cat:'repos',label:'Repos actif'};
+  let label;
+  if(meta.cat==='muscu'){const p=resolveMuscu(type);label=p?p.name:meta.label;}
+  else if(meta.cat==='cardio')label=CARDIO_LABEL[meta.subtype]||meta.label;
+  else label=meta.label;
+  return {type,cat:meta.cat,label};
+}
+/* Heure de séance : choisie par l'utilisateur (DATA.programTimes), sinon défaut. */
+function sessionTimeFor(dow){
+  const t=(DATA.programTimes||[])[dow];
+  return t||(dow>=5?'09:00':'18:00');
+}
+function sessionMinutesFor(dow){const[h,m]=sessionTimeFor(dow).split(':').map(Number);return h*60+m;}
+function frTime(hhmm){const[h,m]=hhmm.split(':').map(Number);return h+'h'+String(m).padStart(2,'0');}
+/* 7.5 → "7h30", 8 → "8h" */
+function hoursFr(h){const H=Math.floor(h),M=Math.round((h-H)*60);return M?H+'h'+String(M).padStart(2,'0'):H+'h';}
 
 /* Checklist items par jour : id, time, main, sub, category */
 const CL_COMMON_AM=[
@@ -1357,49 +1410,39 @@ const CL_COMMON_PM=[
   {id:'etirement',time:'22h45',main:'Étirement 5 min',sub:'Quadriceps, ischios, épaules',cat:'sleep'},
   {id:'coucher',time:'23h30',main:'Coucher 23h30',sub:'Cible 7h30 de sommeil',cat:'sleep'}
 ];
-const CL_SESSION={
-  id:'seance',time:'18h',main:'Séance d\'entraînement',sub:'Terminée avant 20h30',cat:'sport'
-};
-const CL_CARNET={
-  id:'carnet',time:'post-séance',main:'Carnet d\'entraînement rempli',sub:'Poids, reps, sensations',cat:'sport'
-};
-
-/* Checklist composer pour un jour (0=lun .. 6=dim) */
+/* Checklist composer pour un jour (0=lun .. 6=dim) — suit DATA.userProgram */
+const CL_CARNET_SUB={muscu:'Poids, reps, sensations',cardio:'Distance, temps, sensations',mobilite:'Durée, zones travaillées'};
 function checklistForDay(dow){
   const list=[...CL_COMMON_AM,...CL_COMMON_LUNCH];
-  if(dow===0){ /* lundi : course Z2 */
-    list.push({id:'seance',time:'17h30',main:'Course Zone 2 · 12 km',sub:'~1h15 · allure conversationnelle',cat:'sport'});
-    list.push({id:'carnet',time:'post',main:'Noter la course',sub:'Temps, sensations',cat:'sport'});
-  }else if(dow>=1 && dow<=3){ /* mar/mer/jeu : force */
-    list.push({...CL_SESSION,main:'Séance — '+FOCUS_SHORT[dow]});
-    list.push(CL_CARNET);
-  }else if(dow===4){ /* vendredi : repos */
+  const s=sessionForDay(dow);
+  if(s.cat==='repos'){
     list.push({id:'recup_active',time:'17h30',main:'Récupération active',sub:'Marche 30-45 min ou yoga',cat:'sport'});
-  }else if(dow===5 || dow===6){ /* sam/dim : séance matin */
-    /* on remplace l'item séance pour caler à 9h */
-    list.push({...CL_SESSION,time:'9h00',main:'Séance — '+FOCUS_SHORT[dow]});
-    list.push(CL_CARNET);
+  }else{
+    list.push({id:'seance',time:frTime(sessionTimeFor(dow)),main:'Séance — '+s.label,sub:sessionMinutesFor(dow)<12*60?'Idéalement le matin':'Terminée avant 20h30',cat:'sport'});
+    list.push({id:'carnet',time:'post-séance',main:'Carnet d\'entraînement rempli',sub:CL_CARNET_SUB[s.cat]||'',cat:'sport'});
   }
   list.push(...CL_COMMON_PM);
   return list;
 }
 
-/* Mini timeline jour : reprend pour affichage rapide */
+/* Mini timeline jour : suit DATA.userProgram + l'heure de séance choisie.
+   Les entrées sont triées chronologiquement quelle que soit l'heure. */
 function timelineForDay(dow){
-  const t=[];
-  t.push({t:'7h45',b:'Lever + lumière + eau'});
-  t.push({t:'8h00',b:'Petit-déj + créatine + D3'});
-  t.push({t:'12h00',b:dow<2?'<b>Cantine</b> — œufs + grillade + fruit':'Déjeuner — batch ou repas complet'});
-  t.push({t:'15h30',b:'<b>Caféine stop</b>'});
-  if(dow===0)t.push({t:'17h30',b:'<b>Course Zone 2</b> · 12 km'});
-  else if(dow>=1 && dow<=3)t.push({t:'18h00',b:'<b>'+FOCUS[dow]+'</b>'});
-  else if(dow===4)t.push({t:'17h30',b:'Marche lente 30-45 min'});
-  else t.push({t:'9h00',b:'<b>'+FOCUS[dow]+'</b>'});
-  t.push({t:'19h30',b:'Dîner'});
-  t.push({t:'22h00',b:'Bascule lumière'});
-  t.push({t:'22h45',b:'Magnésium + étirement'});
-  t.push({t:'23h30',b:'Coucher'});
-  return t;
+  const s=sessionForDay(dow);
+  const rows=[
+    {m:465,t:'7h45',b:'Lever + lumière + eau'},
+    {m:480,t:'8h00',b:'Petit-déj + créatine + D3'},
+    {m:720,t:'12h00',b:'Déjeuner — batch ou repas complet'},
+    {m:930,t:'15h30',b:'<b>Caféine stop</b>'},
+    {m:1170,t:'19h30',b:'Dîner'},
+    {m:1320,t:'22h00',b:'Bascule lumière'},
+    {m:1365,t:'22h45',b:'Magnésium + étirement'},
+    {m:1410,t:'23h30',b:'Coucher'}
+  ];
+  if(s.cat==='repos')rows.push({m:1050,t:'17h30',b:'Marche lente 30-45 min'});
+  else rows.push({m:sessionMinutesFor(dow),t:frTime(sessionTimeFor(dow)),b:'<b>'+s.label+'</b>'});
+  rows.sort((a,b)=>a.m-b.m);
+  return rows;
 }
 
 /* ============================================================
@@ -1683,20 +1726,7 @@ const EXERCISE_ALTS = {
   ]
 };
 
-const BREAKFASTS=[
-  {name:'Bol grec rapide',time:'5 min',kcal:'~500 kcal · ~35g prot',items:['200g yaourt grec 0%','30g flocons d\'avoine','1 banane ou poignée de fruits rouges','20g amandes ou noix','1 c.s. miel (optionnel)'],note:'Prépare les flocons et les noix la veille dans le bol pour gagner 2 min le matin.'},
-  {name:'Œufs + toast complet',time:'8 min',kcal:'~550 kcal · ~38g prot',items:['3 œufs entiers (brouillés ou à la coque)','2 tranches de pain complet','½ avocat ou fromage blanc','1 fruit frais'],note:'Cuire les œufs pendant que le pain toaste. Total : moins de 8 minutes.'},
-  {name:'Skyr + whey (no-cook)',time:'2 min',kcal:'~450 kcal · ~45g prot',items:['200g skyr nature','1 scoop whey (vanille ou neutre)','1 banane','1 poignée de granola ou flocons d\'avoine'],note:'Option ultra-rapide les jours chargés. Mix skyr + whey la veille si besoin.'},
-  {name:'Crêpes protéinées',time:'15 min (batch)',kcal:'~600 kcal · ~40g prot',items:['2 œufs','200g fromage blanc 0%','80g flocons d\'avoine mixés','1 scoop whey vanille','Cannelle + extrait de vanille'],note:'Prépare 6-8 crêpes en une fois le week-end. Se conserve 4 jours au frigo.'}
-];
 
-const SNACKS=[
-  {name:'Yaourt + amandes',timing:'En-cas matin ou après-midi',kcal:'~200 kcal · ~15g prot',items:['150g yaourt grec','25g amandes'],note:'Riche en protéines, satiété durable. Pas de préparation.'},
-  {name:'Shake post-séance',timing:'Dans les 30-60 min après la séance',kcal:'~250 kcal · ~30g prot',items:['1 scoop whey dans 300ml lait demi-écrémé ou eau','1 banane (optionnel)'],note:'Fenêtre post-séance : idéale pour la synthèse protéique. Prépare la shaker à l\'avance.'},
-  {name:'Fromage blanc + fruit',timing:'Collation 16h ou avant coucher',kcal:'~180 kcal · ~20g prot',items:['200g fromage blanc 0%','1 fruit de saison ou fruits rouges surgelés','1 c.c. miel ou cannelle'],note:'Caséine naturelle du fromage blanc : parfaite avant le coucher pour la récupération musculaire nocturne.'},
-  {name:'Œuf dur + fruit',timing:'En-cas express n\'importe quand',kcal:'~150 kcal · ~10g prot',items:['2 œufs durs (cuits à l\'avance)','1 pomme ou orange'],note:'Prépare 6 œufs durs le dimanche. Se conserve 5 jours au frigo.'},
-  {name:'Oléagineux + carré de chocolat noir',timing:'Fin d\'après-midi, envie de sucre',kcal:'~220 kcal · ~6g prot',items:['30g amandes ou noix de cajou','2-3 carrés chocolat noir 70%+'],note:'Répond à l\'envie de sucre sans pic glycémique. Les graisses des noix ralentissent l\'absorption.'}
-];
 
 /* Exercices clés à tracker dans les graphes */
 const KEY_LIFTS=[
@@ -1706,72 +1736,6 @@ const KEY_LIFTS=[
   {key:'ohp_bar',label:'Développé militaire barre',color:'#2C3340'},
   {key:'ohp_db',label:'Développé épaules haltères',color:'#7C8A5C'},
   {key:'dips',label:'Dips',color:'#7D3D2B'}
-];
-
-/* ============================================================
-   RECIPES
-   ============================================================ */
-const RECIPES=[
-  {
-    name:'Chili maison',
-    meta:'~6 portions · ~600 kcal/portion · 40g prot',
-    emoji:'🫘',
-    prep:'15 min',
-    cook:'40 min',
-    ing:['600 g viande hachée (5%)','2 boîtes haricots rouges','2 boîtes tomates concassées','2 oignons','3 gousses d\'ail','1 c.s. cumin','1 c.s. paprika','1 c.c. chili','1 c.c. origan séché','Huile d\'olive, sel, poivre'],
-    steps:['Épluche et émince les oignons et l\'ail. Fais-les revenir à feu moyen dans 2 c.s. d\'huile d\'olive pendant 5 min.','Ajoute la viande hachée. Monte à feu vif et fais-la dorer 5-7 min en remuant. Assaisonne avec sel et poivre.','Ajoute toutes les épices (cumin, paprika, chili, origan). Mélange bien pendant 1 min pour les faire "bloomer".','Verse les tomates concassées et les haricots rouges égouttés. Mélange.','Baisse à feu doux, couvre et laisse mijoter 25-30 min. Goûte et rectifie l\'assaisonnement.','Laisse refroidir avant de mettre en barquettes. Se conserve 5 jours au frigo, 3 mois au congélateur.'],
-    tip:'Prépare-le le dimanche soir. Plus il repose, meilleur c\'est. Sers avec du riz ou du pain complet.'
-  },
-  {
-    name:'Poulet basquaise',
-    meta:'~6 portions · ~550 kcal/portion · 42g prot',
-    emoji:'🍗',
-    prep:'20 min',
-    cook:'45 min',
-    ing:['1 kg cuisses de poulet désossées (ou blancs)','3 poivrons (1 rouge, 1 vert, 1 jaune)','3 tomates mûres (ou 1 boîte tomates concassées)','2 oignons','3 gousses d\'ail','Piment d\'Espelette, thym, laurier','Huile d\'olive, sel, poivre'],
-    steps:['Coupe les poivrons en lamelles, les oignons en demi-rondelles, l\'ail en tranches. Réserve.','Fais dorer le poulet dans l\'huile chaude 3-4 min par face. Sors-le et réserve.','Dans la même poêle, fais revenir oignons et ail 5 min. Ajoute les poivrons, cuis encore 5-8 min.','Ajoute les tomates, le thym, le laurier et le piment d\'Espelette. Mélange bien.','Repose le poulet dans la sauce. Couvre et laisse mijoter 30 min à feu doux.','Goûte, rectifie l\'assaisonnement. Retire le laurier. Laisse refroidir avant de portionner.'],
-    tip:'Excellent avec du riz complet ou des pommes de terre vapeur. La sauce se congèle parfaitement.'
-  },
-  {
-    name:'Curry de maquereau',
-    meta:'~6 portions · ~620 kcal/portion · 38g prot',
-    emoji:'🐟',
-    prep:'10 min',
-    cook:'25 min',
-    ing:['600 g filets de maquereau frais ou surgelés','1 oignon','2 gousses d\'ail','2 c.s. pâte de curry (vert ou rouge)','400 ml lait de coco light','1 boîte pois chiches égouttés','½ citron vert','Coriandre fraîche','Huile de coco ou olive'],
-    steps:['Émince l\'oignon et l\'ail. Fais-les revenir dans l\'huile 4-5 min à feu moyen.','Ajoute la pâte de curry. Fais-la revenir 1 min en remuant pour la faire chauffer.','Verse le lait de coco. Mélange bien, porte à légère ébullition.','Ajoute les pois chiches. Laisse mijoter 5 min.','Coupe les filets de maquereau en morceaux. Ajoute dans la sauce, cuis 7-10 min à feu doux.','Presse le citron vert, ajoute la coriandre fraîche ciselée. Rectifie l\'assaisonnement.'],
-    tip:'Maquereau = poisson le moins cher ET le plus riche en oméga-3. Évite la capsule oméga-3 ce jour-là.'
-  },
-  {
-    name:'Riz complet sauté aux légumes & œufs',
-    meta:'~5 portions · ~520 kcal/portion · 28g prot',
-    emoji:'🍳',
-    prep:'15 min',
-    cook:'20 min',
-    ing:['400 g riz complet cuit (la veille ou batch)','4 œufs','2 carottes','2 courgettes','1 poivron rouge','100 g edamame ou petits pois surgelés','3 c.s. sauce soja','1 c.s. huile de sésame','2 gousses d\'ail','Gingembre frais (optionnel)','Graines de sésame'],
-    steps:['Coupe les légumes en petits dés réguliers. Émince l\'ail et le gingembre.','Fais chauffer un wok ou grande poêle à feu très vif. Ajoute l\'huile de sésame.','Fais revenir l\'ail et le gingembre 30 sec. Ajoute les carottes, cuis 3 min.','Ajoute courgettes et poivron, cuis 3-4 min en remuant. Ajoute les edamame.','Pousse les légumes sur le côté, casse les œufs au centre. Brouille-les rapidement.','Ajoute le riz froid. Mélange tout, verse la sauce soja. Cuis encore 3 min à feu vif.','Parsème de graines de sésame. Goûte et rectifie.'],
-    tip:'Le secret : riz froid et feu très vif. Avec du riz chaud ça devient pâteux.'
-  },
-  {
-    name:'Soupe lentilles corail & épinards',
-    meta:'~6 portions · ~380 kcal/portion · 22g prot',
-    emoji:'🍵',
-    prep:'10 min',
-    cook:'30 min',
-    ing:['300 g lentilles corail','200 g épinards frais ou surgelés','1 boîte tomates concassées','2 oignons','3 gousses d\'ail','1 c.s. cumin','1 c.c. curcuma','1 c.c. coriandre moulue','1 citron (jus)','1,5 L bouillon légumes ou eau','Huile d\'olive, sel, poivre'],
-    steps:['Émince les oignons et l\'ail. Fais-les revenir dans l\'huile 5 min.','Ajoute les épices. Fais-les revenir 1 min en remuant.','Ajoute les lentilles corail (pas besoin de les tremper). Mélange bien.','Verse les tomates et le bouillon. Porte à ébullition.','Baisse à feu doux, couvre et laisse cuire 20-25 min jusqu\'à ce que les lentilles soient fondantes.','Ajoute les épinards, laisse cuire 3 min. Presse le citron. Mixe partiellement si tu veux une texture crémeuse.'],
-    tip:'Très économique, très protéiné, très satiétant. Parfait pour les soirs de semaine fatigués.'
-  },
-  {
-    name:'Filet de saumon citron-herbes',
-    meta:'~4 portions · ~480 kcal/portion · 44g prot',
-    emoji:'🐠',
-    prep:'10 min',
-    cook:'20 min',
-    ing:['4 filets de saumon (150 g chacun)','2 citrons','4 gousses d\'ail','Aneth frais ou thym','2 c.s. huile d\'olive','Sel, poivre, paprika fumé'],
-    steps:['Préchauffe le four à 200°C. Dispose les filets dans un plat huilé.','Mélange huile d\'olive, jus d\'un citron, ail émincé, sel, poivre, paprika.','Badigeonne généreusement les filets de ce mélange.','Dispose des rondelles de citron par-dessus. Parsème d\'aneth.','Enfourne 15-18 min selon l\'épaisseur. Le saumon doit être encore légèrement nacré au centre.','Laisse reposer 2 min avant de portionner. Sers avec des légumes vapeur ou une salade.'],
-    tip:'Prépare en double et mange froid le lendemain. Excellent en salade avec quinoa et avocat.'
-  }
 ];
 
 /* ============================================================
@@ -1827,8 +1791,6 @@ function setGreetingName(){
   document.getElementById('setKcal').value=DATA.settings.kcal||2600;
   document.getElementById('setProt').value=DATA.settings.prot||155;
   document.getElementById('setSleep').value=DATA.settings.sleep||7.5;
-  document.getElementById('setSex').value=DATA.settings.sex||'M';
-  document.getElementById('setAge').value=DATA.settings.age||25;
 }
 
 /* ============================================================
@@ -1884,7 +1846,7 @@ function renderRoutine(){
   const dow=dayOfWeek(d);
   const isToday=k===todayKey();
   document.getElementById('routineDayLabel').textContent=(isToday?'Aujourd\'hui · ':'')+frenchDate(d);
-  document.getElementById('routineFocus').textContent='Focus du jour — '+FOCUS[dow];
+  document.getElementById('routineFocus').textContent='Focus du jour — '+sessionForDay(dow).label;
 
   /* timeline */
   const tl=document.getElementById('dayTimeline');
@@ -1945,13 +1907,14 @@ function toggleCheck(k,id){
   if(k===todayKey()){updateDayRing();renderDashboard();}
 }
 function resetDay(k){
-  if(!confirm('Réinitialiser tous les items du jour ?'))return;
-  ensureDay(k);
-  DATA.days[k].checklist={};
-  save();
-  renderRoutine();
-  updateDayRing();
-  renderDashboard();
+  askConfirm('Réinitialiser ce jour','Toutes les coches du jour seront effacées.','Réinitialiser',()=>{
+    ensureDay(k);
+    DATA.days[k].checklist={};
+    save();
+    renderRoutine();
+    updateDayRing();
+    renderDashboard();
+  });
 }
 
 /* ============================================================
@@ -1977,11 +1940,34 @@ let chartAdherence,chartSleep,chartLifts,chartWeight;
 
 function renderDashboard(){
   updateDayRing();
+  renderWelcome();
   renderKpis();
   renderWeekStrip();
   renderLeaks();
   renderRecentSessions();
   setTimeout(()=>{renderChartAdherence();renderChartSleep();renderChartLifts();},80);
+}
+
+/* Carte d'accueil premier lancement — disparaît dès la première coche ou séance */
+function goTab(t){const a=document.querySelector('nav.tabs a[data-tab="'+t+'"]');if(a)a.click();}
+function renderWelcome(){
+  const host=document.getElementById('welcomeCard');
+  if(!host)return;
+  const hasChecks=Object.keys(DATA.days).some(k=>DATA.days[k]&&DATA.days[k].checklist&&Object.keys(DATA.days[k].checklist).length>0);
+  if(hasChecks||DATA.sessions.length>0){host.style.display='none';host.innerHTML='';return;}
+  const profileOk=DATA.sportProfile&&DATA.sportProfile.configured;
+  const steps=[];
+  if(!profileOk)steps.push({t:'Crée ton programme sport',tab:'sport'});
+  steps.push({t:'Découvre ta routine du jour',tab:'routine'});
+  steps.push({t:'Règle prénom et cibles',tab:'suivi'});
+  host.style.display='block';
+  host.innerHTML='<div class="card mb18" style="background:linear-gradient(158deg,var(--olive),var(--olive-deep));color:var(--paper);">'+
+    '<h3 style="color:var(--paper);">Bienvenue dans ton carnet 👋</h3>'+
+    '<p style="font-size:14px;color:rgba(244,239,230,.85);margin:6px 0 14px;max-width:56ch;">'+
+      (profileOk?'Deux':'Trois')+' petits pas pour démarrer — pas besoin d\'en faire plus aujourd\'hui. Le carnet se remplit au fil des jours, à ton rythme.</p>'+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;">'+
+      steps.map((s,i)=>'<button class="'+(i===0?'btn btn-primary btn-sm':'btn-auth')+'" onclick="goTab(\''+s.tab+'\')">'+(i+1)+' · '+s.t+'</button>').join('')+
+    '</div></div>';
 }
 
 function renderKpis(){
@@ -2056,7 +2042,7 @@ function renderKpis(){
     {label:'Adhérence 7j',value:adh7+'<span class="unit">%</span>',sub:adh7>=70?'Solide':adh7>=50?'À renforcer':'À reprendre',cls:adh7>=70?'olive':adh7>=50?'gold':'clay'},
     {label:'Streak',value:streak+'<span class="unit">j</span>',sub:streak>0?'Jours ≥70%':'Lance le compteur',cls:'clay'},
     {label:'Séances semaine',value:sessionsWeek+'<span class="unit">/ 6</span>',sub:sessionsLastWeek+' sur 7j',cls:'olive'},
-    {label:'Sommeil moyen',value:sleepAvg+'<span class="unit">h</span>',sub:'Cible '+(DATA.settings.sleep||7.5)+'h',cls:'night'},
+    {label:'Sommeil moyen',value:sleepAvg+'<span class="unit">h</span>',sub:'Cible '+hoursFr(DATA.settings.sleep||7.5),cls:'night'},
     {label:'Total séances',value:totalSess+'',sub:'Depuis le début',cls:'gold'},
     {label:'Poids actuel',value:weightCur,sub:weightTrend||'Aucune pesée',cls:'olive'}
   ];
@@ -2163,9 +2149,23 @@ function chartDefaults(){
   Chart.defaults.font.size=11;
   return true;
 }
+/* Restaure le canvas d'un graphe s'il a été remplacé par un message d'état vide */
+function ensureCanvas(id){
+  let c=document.getElementById(id);
+  if(!c){
+    const host=document.querySelector('.chart-canvas[data-canvas="'+id+'"]');
+    if(host){host.innerHTML='<canvas id="'+id+'"></canvas>';c=document.getElementById(id);}
+  }
+  return c;
+}
+function showChartEmpty(id,msg){
+  const c=document.getElementById(id);
+  const host=c?c.parentElement:document.querySelector('.chart-canvas[data-canvas="'+id+'"]');
+  if(host)host.innerHTML='<div style="font-size:13.5px;color:var(--muted);font-style:italic;text-align:center;padding:60px 10px;">'+msg+'</div>';
+}
 function renderChartAdherence(){
   if(!chartDefaults())return;
-  const ctx=document.getElementById('chartAdherence');if(!ctx)return;
+  const ctx=ensureCanvas('chartAdherence');if(!ctx)return;
   const today=new Date();
   const labels=[],values=[];
   for(let i=29;i>=0;i--){
@@ -2177,7 +2177,8 @@ function renderChartAdherence(){
       values.push(Math.round(done/list.length*100));
     }else values.push(null);
   }
-  if(chartAdherence)chartAdherence.destroy();
+  if(chartAdherence){chartAdherence.destroy();chartAdherence=null;}
+  if(values.every(v=>v===null)){showChartEmpty('chartAdherence','Coche ta première routine pour voir ton adhérence apparaître ici.');return;}
   chartAdherence=new Chart(ctx,{type:'bar',data:{labels,datasets:[{
     label:'%',data:values,backgroundColor:values.map(v=>v>=80?'#3C4A28':v>=50?'#C08A3E':v>=1?'#B05634':'rgba(180,180,180,.2)'),borderRadius:3,barPercentage:.85
   }]},options:{
@@ -2189,7 +2190,7 @@ function renderChartAdherence(){
 }
 function renderChartSleep(){
   if(!chartDefaults())return;
-  const ctx=document.getElementById('chartSleep');if(!ctx)return;
+  const ctx=ensureCanvas('chartSleep');if(!ctx)return;
   const today=new Date();
   const labels=[],values=[];
   for(let i=29;i>=0;i--){
@@ -2198,7 +2199,8 @@ function renderChartSleep(){
     const sl=DATA.days[k]&&DATA.days[k].sleep;
     values.push(sl&&sl.hours?sl.hours:null);
   }
-  if(chartSleep)chartSleep.destroy();
+  if(chartSleep){chartSleep.destroy();chartSleep=null;}
+  if(values.every(v=>v===null)){showChartEmpty('chartSleep','Enregistre ta première nuit dans l\'onglet Sommeil.');return;}
   chartSleep=new Chart(ctx,{type:'line',data:{labels,datasets:[{
     label:'h',data:values,borderColor:'#2C3340',backgroundColor:'rgba(44,51,64,.1)',fill:true,tension:.32,
     pointBackgroundColor:'#2C3340',pointRadius:3,spanGaps:true
@@ -2213,7 +2215,7 @@ function renderChartSleep(){
 }
 function renderChartLifts(){
   if(!chartDefaults())return;
-  const ctx=document.getElementById('chartLifts');if(!ctx)return;
+  const ctx=ensureCanvas('chartLifts');if(!ctx)return;
   /* pour chaque KEY_LIFT, série de points (date, max poids du jour) */
   const datasets=[];
   KEY_LIFTS.forEach(L=>{
@@ -2235,9 +2237,9 @@ function renderChartLifts(){
       });
     }
   });
-  if(chartLifts)chartLifts.destroy();
+  if(chartLifts){chartLifts.destroy();chartLifts=null;}
   if(!datasets.length){
-    ctx.parentElement.innerHTML='<div style="font-size:13.5px;color:var(--muted);font-style:italic;text-align:center;padding:60px 10px;">Logue tes premières séances pour voir tes courbes de progression apparaître ici.</div>';
+    showChartEmpty('chartLifts','Logue tes premières séances pour voir tes courbes de progression apparaître ici.');
     return;
   }
   chartLifts=new Chart(ctx,{type:'line',data:{datasets},options:{
@@ -2459,19 +2461,31 @@ function renderProgramCustomizer(){
       }).join('');
       return g.group?'<optgroup label="'+g.group+'">'+inner+'</optgroup>':inner;
     }).join('');
+    const timeVal=(DATA.programTimes||[])[i]||'';
     return '<div class="prog-day-row">'+
       '<div class="prog-day-name">'+name+'</div>'+
-      '<select class="fi prog-day-select" id="prog-dow-'+i+'">'+opts+'</select>'+
+      '<select class="fi prog-day-select" id="prog-dow-'+i+'" onchange="progRowChanged('+i+')">'+opts+'</select>'+
+      '<input type="time" class="fi fi-sm prog-day-time" id="progtime-'+i+'" value="'+timeVal+'"'+(cur==='repos'?' disabled':'')+' title="Heure de la séance (facultatif)" />'+
       '</div>';
   }).join('');
 }
 
+/* Grise l'heure quand le jour passe en repos */
+function progRowChanged(i){
+  const type=document.getElementById('prog-dow-'+i).value;
+  const t=document.getElementById('progtime-'+i);
+  if(t)t.disabled=(type==='repos');
+}
+
 function saveUserProgram(){
   const prog=DOW_NAMES.map((_,i)=>document.getElementById('prog-dow-'+i).value);
+  const times=DOW_NAMES.map((_,i)=>{const el=document.getElementById('progtime-'+i);return (el&&el.value)?el.value:null;});
   DATA.userProgram=prog;
+  DATA.programTimes=times;
   save();
-  toast('Programme enregistré','olive','Le calendrier se met à jour automatiquement.');
+  toast('Programme enregistré','olive','Calendrier, routine et rappels se mettent à jour.');
   renderCalendar();
+  renderRoutine();
 }
 
 /* ============================================================
@@ -2542,11 +2556,12 @@ function renderSportProfile(){
 }
 function regenerateProgram(){
   if(!DATA.sportProfile||!DATA.sportProfile.configured){openSportQuestionnaire();return;}
-  if(!confirm('Régénérer le programme écrasera ta répartition actuelle des jours. Continuer ?'))return;
-  DATA.userProgram=generateProgram(DATA.sportProfile);
-  save();
-  toast('Programme régénéré','olive','La semaine a été réadaptée à ton profil.');
-  renderSport();
+  askConfirm('Régénérer le programme','Ta répartition actuelle des jours sera écrasée et réadaptée à ton profil.','Régénérer',()=>{
+    DATA.userProgram=generateProgram(DATA.sportProfile);
+    save();
+    toast('Programme régénéré','olive','La semaine a été réadaptée à ton profil.');
+    renderSport();
+  });
 }
 
 
@@ -2713,11 +2728,12 @@ function viewSession(id){
 }
 function deleteCurrentSession(){
   if(!currentSessionView)return;
-  if(!confirm('Supprimer cette séance ?'))return;
-  DATA.sessions=DATA.sessions.filter(s=>s.id!==currentSessionView);
-  save();
-  closeModal('modalView');
-  renderSport();renderDashboard();
+  askConfirm('Supprimer cette séance','La séance sera définitivement supprimée de l\'historique.','Supprimer',()=>{
+    DATA.sessions=DATA.sessions.filter(s=>s.id!==currentSessionView);
+    save();
+    closeModal('modalView');
+    renderSport();renderDashboard();
+  });
 }
 
 /* ============================================================
@@ -2894,6 +2910,7 @@ function saveMobilitySession(){
   if(currentLoggerDate===todayKey()){
     ensureDay(currentLoggerDate);
     DATA.days[currentLoggerDate].checklist['seance']=true;
+    DATA.days[currentLoggerDate].checklist['carnet']=true;
     save();
   }
   renderSport();renderDashboard();renderRoutine();
@@ -3087,9 +3104,29 @@ function renderNutrition(){
   const k=todayKey();
   ensureDay(k);
   const m=DATA.days[k].macros||{};
-  document.getElementById('todayKcal').value=m.kcal||'';
-  document.getElementById('todayProt').value=m.prot||'';
+  const kcalT=DATA.settings.kcal||2600,protT=DATA.settings.prot||155;
+  const elK=document.getElementById('todayKcal'),elP=document.getElementById('todayProt');
+  elK.value=m.kcal||'';elK.placeholder=kcalT;
+  elP.value=m.prot||'';elP.placeholder=protT;
   document.getElementById('todayWater').value=m.water||'';
+  document.getElementById('macroTargets').textContent='Cibles : ~'+kcalT+' kcal · ~'+protT+' g protéines · ~8-10 verres d\'eau — réglables dans Suivi → Réglages.';
+  renderMacroStatus();
+}
+
+/* Ligne "Aujourd'hui : X / cible" sous les macros, si des valeurs sont saisies */
+function renderMacroStatus(){
+  const host=document.getElementById('macroStatus');
+  if(!host)return;
+  const k=todayKey();
+  const m=(DATA.days[k]&&DATA.days[k].macros)||{};
+  if(!m.kcal&&!m.prot&&!m.water){host.style.display='none';host.textContent='';return;}
+  const kcalT=DATA.settings.kcal||2600,protT=DATA.settings.prot||155;
+  const parts=[];
+  if(m.kcal)parts.push(m.kcal+' / '+kcalT+' kcal');
+  if(m.prot)parts.push(m.prot+' / '+protT+' g prot');
+  if(m.water)parts.push(m.water+' verres d\'eau');
+  host.style.display='block';
+  host.textContent='Aujourd\'hui : '+parts.join(' · ');
 }
 
 /* ---- INDIVIDUAL RECIPE DATA ---- */
@@ -3163,7 +3200,8 @@ function openBreakfastFiche(){
   const w=window.open('','_blank');w.document.write(html);w.document.close();
 }
 
-function toggleRecipe(id){
+/* Déplie/replie une section (utilisé par l'historique des bilans sanguins) */
+function toggleSection(id){
   const el=document.getElementById(id);const tog=document.getElementById('toggle-'+id);
   if(!el)return;const open=el.style.display==='none';
   el.style.display=open?'block':'none';if(tog)tog.textContent=open?'▾':'▸';
@@ -3179,6 +3217,7 @@ function saveTodayMacros(){
     water:parseInt(document.getElementById('todayWater').value)||null
   };
   save();
+  renderMacroStatus();
   toast('Macros enregistrées','olive','');
 }
 
@@ -3316,11 +3355,13 @@ function renderBloodHistory(){
 }
 
 function deleteBloodTest(date){
-  if(!confirm('Supprimer ce bilan ?'))return;
-  DATA.bloodTests=(DATA.bloodTests||[]).filter(b=>b.date!==date);
-  save();
-  renderBloodHistory();
-  toast('Bilan supprimé','','');
+  askConfirm('Supprimer ce bilan','Le bilan du '+frenchDate(dateFromKey(date))+' sera définitivement supprimé.','Supprimer',()=>{
+    DATA.bloodTests=(DATA.bloodTests||[]).filter(b=>b.date!==date);
+    save();
+    renderBloodHistory();
+    renderBloodChart();
+    toast('Bilan supprimé','','');
+  });
 }
 
 let bloodChartInstance=null;
@@ -3334,10 +3375,14 @@ function renderBloodChart(){
   const key=document.getElementById('bloodChartSelect')?.value||'vitD';
   const field=getBloodNorms().find(f=>f.key===key);
   const filtered=tests.filter(t=>t[key]!=null);
+  const canvasHost=section.querySelector('.chart-canvas');
+  if(bloodChartInstance){bloodChartInstance.destroy();bloodChartInstance=null;}
   if(filtered.length<2){
-    document.getElementById('chartBlood').closest('.chart-canvas').innerHTML='<p style="font-size:13px;color:var(--muted);padding:20px 0;">Pas assez de données pour ce marqueur (minimum 2 bilans).</p>';
+    canvasHost.innerHTML='<p style="font-size:13px;color:var(--muted);padding:20px 0;">Pas assez de données pour ce marqueur (minimum 2 bilans).</p>';
     return;
   }
+  /* restaure le canvas s'il a été remplacé par le message ci-dessus */
+  if(!document.getElementById('chartBlood'))canvasHost.innerHTML='<canvas id="chartBlood"></canvas>';
 
   const labels=filtered.map(t=>frenchDate(dateFromKey(t.date)));
   const values=filtered.map(t=>t[key]);
@@ -3345,7 +3390,6 @@ function renderBloodChart(){
 
   const ctx=document.getElementById('chartBlood');
   if(!ctx)return;
-  if(bloodChartInstance){bloodChartInstance.destroy();bloodChartInstance=null;}
   bloodChartInstance=new Chart(ctx,{
     type:'bar',
     data:{
@@ -3381,6 +3425,9 @@ function renderSleep(){
   document.getElementById('bedtime').value=sl.bedtime||'23:30';
   document.getElementById('wakeup').value=sl.wakeup||'07:45';
   document.getElementById('sleepQuality').value=sl.quality||'';
+  document.getElementById('sleepHint').textContent=sl.hours
+    ?'Enregistré : '+sl.hours+'h cette nuit.'
+    :'Cible '+hoursFr(DATA.settings.sleep||7.5)+' de sommeil réel.';
 
   /* KPI */
   const today=new Date();
@@ -3504,11 +3551,11 @@ function renderSuivi(){
 }
 function renderChartWeight(){
   if(!chartDefaults())return;
-  const ctx=document.getElementById('chartWeight');if(!ctx)return;
+  const ctx=ensureCanvas('chartWeight');if(!ctx)return;
   const data=[...DATA.weighIns].sort((a,b)=>a.date.localeCompare(b.date));
-  if(chartWeight)chartWeight.destroy();
+  if(chartWeight){chartWeight.destroy();chartWeight=null;}
   if(!data.length){
-    ctx.parentElement.innerHTML='<div style="font-size:13.5px;color:var(--muted);font-style:italic;text-align:center;padding:60px 10px;">Aucune pesée pour le moment. Ajoute-en une pour voir la courbe.</div>';
+    showChartEmpty('chartWeight','Aucune pesée pour le moment. Ajoute-en une pour voir la courbe.');
     return;
   }
   chartWeight=new Chart(ctx,{type:'line',data:{labels:data.map(w=>w.date),datasets:[{
@@ -3541,10 +3588,11 @@ function deleteWeighIn(idx){
   const sorted=[...DATA.weighIns].sort((a,b)=>b.date.localeCompare(a.date));
   const target=sorted[idx];
   if(!target)return;
-  if(!confirm('Supprimer la pesée du '+target.date+' ?'))return;
-  DATA.weighIns=DATA.weighIns.filter(w=>!(w.date===target.date&&w.kg===target.kg));
-  save();
-  renderSuivi();renderDashboard();
+  askConfirm('Supprimer cette pesée','La pesée du '+frenchDate(dateFromKey(target.date))+' ('+target.kg+' kg) sera supprimée.','Supprimer',()=>{
+    DATA.weighIns=DATA.weighIns.filter(w=>!(w.date===target.date&&w.kg===target.kg));
+    save();
+    renderSuivi();renderDashboard();
+  });
 }
 
 function saveSettings(){
@@ -3552,11 +3600,11 @@ function saveSettings(){
   DATA.settings.kcal=parseInt(document.getElementById('setKcal').value)||2600;
   DATA.settings.prot=parseInt(document.getElementById('setProt').value)||155;
   DATA.settings.sleep=parseFloat(document.getElementById('setSleep').value)||7.5;
-  DATA.settings.sex=document.getElementById('setSex').value||'M';
-  DATA.settings.age=parseInt(document.getElementById('setAge').value)||25;
   save();
   setGreetingName();
-  renderBloodHistory();
+  renderNutrition();
+  renderSleep();
+  renderDashboard();
   toast('Réglages enregistrés','olive','');
 }
 
@@ -3579,29 +3627,49 @@ function importData(input){
     try{
       const obj=JSON.parse(reader.result);
       if(!obj.version){toast('Fichier invalide','warn','');return;}
-      if(!confirm('Remplacer toutes les données actuelles par celles du fichier ?'))return;
-      DATA=obj;
-      save();
-      setGreetingName();
-      renderAll();renderSport();renderNutrition();renderSleep();renderSuppl();renderSuivi();
-      toast('Données importées','olive','');
+      askConfirm('Importer ces données','Toutes les données actuelles seront remplacées par celles du fichier.','Importer',()=>{
+        DATA=obj;
+        save();
+        setGreetingName();
+        renderAll();renderSport();renderNutrition();renderSleep();renderSuppl();renderSuivi();
+        toast('Données importées','olive','');
+      });
     }catch(e){toast('Erreur de lecture','warn','Fichier JSON invalide');}
   };
   reader.readAsText(f);
   input.value='';
 }
 function confirmReset(){
-  if(!confirm('Effacer TOUTES les données du carnet ? Cette action est irréversible. Pense à exporter avant.'))return;
-  if(!confirm('Vraiment ? Toutes les checklists, séances et pesées seront perdues.'))return;
-  localStorage.removeItem(KEY);
-  location.reload();
+  askConfirm('Tout effacer','Toutes tes données — routine, séances, pesées, bilans — seront définitivement effacées de ce navigateur. Pense à exporter avant.','Tout effacer',()=>{
+    localStorage.removeItem(KEY);
+    location.reload();
+  });
 }
 
 /* ============================================================
    MODALS
    ============================================================ */
 function openModal(id){document.getElementById(id).classList.add('on');document.body.style.overflow='hidden';}
-function closeModal(id){document.getElementById(id).classList.remove('on');document.body.style.overflow='';}
+function closeModal(id){
+  document.getElementById(id).classList.remove('on');
+  /* ne rétablit le scroll que si plus aucune modale n'est ouverte (confirm par-dessus une autre modale) */
+  if(!document.querySelector('.modal-bg.on'))document.body.style.overflow='';
+}
+
+/* ---- Modale de confirmation (remplace confirm() natif) ---- */
+let confirmCb=null;
+function askConfirm(title,msg,btnLabel,cb){
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmMsg').textContent=msg;
+  document.getElementById('confirmBtn').textContent=btnLabel||'Confirmer';
+  confirmCb=cb;
+  openModal('modalConfirm');
+}
+function closeConfirm(ok){
+  closeModal('modalConfirm');
+  const cb=confirmCb;confirmCb=null;
+  if(ok&&cb)cb();
+}
 function setupModalClose(){
   document.querySelectorAll('.modal-bg').forEach(m=>{
     m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id);});
@@ -3649,24 +3717,17 @@ function runNotifications(){
     const name=DATA.name?', '+DATA.name:'';
     showOnce('hello','Bonjour'+name+' ☀️','Pense à la lumière du matin (5 min dehors) et au petit-déjeuner.');
   }
-  /* Rappel séance — 30 min avant */
-  if(dow>=0 && dow<=3){
-    /* lun=course 17h30, mar/mer/jeu = 18h */
-    const sessionT=dow===0?17*60+30:18*60;
+  /* Rappels séance — basés sur le programme utilisateur et son heure de séance */
+  const sToday=sessionForDay(dow);
+  if(sToday.cat!=='repos'){
+    const sessionT=sessionMinutesFor(dow);
     if(t>=sessionT-30 && t<sessionT+5 && !cl.seance){
-      const lbl=dow===0?'Course Zone 2 dans ~30 min':'Séance '+FOCUS_SHORT[dow]+' dans ~30 min';
-      showOnce('preseance','💪 Prépare-toi',lbl+'. Pré-séance léger : banane si tu as faim.','gold');
+      showOnce('preseance','💪 Prépare-toi','Séance '+sToday.label+' dans ~30 min. Pré-séance léger : banane si tu as faim.','gold');
     }
-  }
-  /* Sam/dim 9h : déjà debout */
-  if((dow===5||dow===6) && t>=8*60+30 && t<9*60+15 && !cl.seance){
-    showOnce('preseance','💪 Séance dans peu','Push/Pull B à 9h. Banane + amandes en pré-séance si besoin.','gold');
-  }
-  /* Carnet rempli après séance ? */
-  if(dow!==4){ /* sauf vendredi */
-    const sessionEnd=dow===0?19*60:dow<=3?19*60+30:10*60+45;
+    /* Carnet rempli après séance ? (estimation : séance ~1h30) */
+    const sessionEnd=sessionT+95;
     if(t>=sessionEnd+15 && cl.seance && !cl.carnet){
-      showOnce('carnet','📓 N\'oublie pas ton carnet','Note les poids et reps de ta séance pendant que c\'est frais.','clay');
+      showOnce('carnet','📓 N\'oublie pas ton carnet','Note ta séance pendant que c\'est frais.','clay');
     }
   }
   /* 22h : bascule lumière */
